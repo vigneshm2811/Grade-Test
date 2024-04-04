@@ -49,3 +49,22 @@ export const SideBarData = [
     path: "profile",
   },
 ];
+
+
+export const TestNavBarData = [
+  {
+    id: 1,
+    label: "Home",
+    Path: "",
+  },
+  {
+    id: 2,
+    label: "Test type",
+    Path: "",
+  },
+  {
+    id: 3,
+    label: "Resource",
+    Path: "",
+  },
+];
