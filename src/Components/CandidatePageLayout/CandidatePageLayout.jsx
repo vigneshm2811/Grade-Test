@@ -6,7 +6,9 @@ const CandidatePageLayout = () => {
   return (
     <>
       <TestNavBar />
-      <Outlet />
+      <div className="">
+        <Outlet />
+      </div>
     </>
   );
 };

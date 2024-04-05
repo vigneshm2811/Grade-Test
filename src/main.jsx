@@ -30,6 +30,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="user" element={<CandidatePageLayout />}>
           <Route path="test" element={<TestInterface />} />
+          <Route path="home" element={<CandidateHome />} />
           <Route path="result" element={<ResultInterface />} />
         </Route>
       </Route>
