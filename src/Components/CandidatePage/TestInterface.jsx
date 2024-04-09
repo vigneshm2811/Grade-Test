@@ -3,15 +3,68 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CachedIcon from "@mui/icons-material/Cached";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { verbalQuestionsData } from "../../helper/mainData";
-import { useScoreContext } from "../../Context/ScoreContextProvider";
+import { useDispatch } from "react-redux";
+import { addToResult } from "../../Features/Result/ResultSlice";
+import { currentQuestions } from "../../Features/CurrentQuestions/QuestionSlice";
+import { useNavigate } from "react-router-dom";
 
 const TestInterface = () => {
-  const [questionResults, setQuestionResults] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [selectedOptions, setSelectedOptions] = useState(
+    Array(verbalQuestionsData.length).fill(null)
+  );
+  const [answeredCount, setAnsweredCount] = useState(0);
+  const [unansweredCount, setUnansweredCount] = useState(
+    verbalQuestionsData.length
+  );
+  const [markedForReview, setMarkedForReview] = useState(
+    Array(verbalQuestionsData.length).fill(false)
+  );
+
+  const handleOptionSelect = (questionIndex, optionIndex) => {
+    const updatedSelectedOptions = [...selectedOptions];
+    updatedSelectedOptions[questionIndex] = optionIndex;
+    setSelectedOptions(updatedSelectedOptions);
+
+    if (selectedOptions[questionIndex] === null) {
+      setAnsweredCount(answeredCount + 1);
+      setUnansweredCount(unansweredCount - 1);
+    }
+  };
+
+  const handleMarkForReview = (questionIndex) => {
+    const updatedMarkedForReview = [...markedForReview];
+    updatedMarkedForReview[questionIndex] = !markedForReview[questionIndex];
+    setMarkedForReview(updatedMarkedForReview);
+  };
+
+  const handleSubmit = () => {
+    const questionResults = verbalQuestionsData.map((data, i) => {
+      const selectedOptionIndex = selectedOptions[i];
+      const selectedOption = data.options[selectedOptionIndex];
+      const isCorrect = selectedOption === data.answer;
+      const score = isCorrect ? data.points : 0;
+
+      return {
+        id: data.id,
+        selectedAnswer: selectedOption,
+        isCorrect: isCorrect,
+        score: score,
+      };
+    });
+
+    dispatch(addToResult(questionResults));
+    dispatch(currentQuestions(verbalQuestionsData));
+    navigate("/user/result");
+  };
 
   const children = ({ remainingTime }) => {
     const hours = Math.floor(remainingTime / 3600);
@@ -24,46 +77,6 @@ const TestInterface = () => {
       </div>
     );
   };
-
-  const handleOptionSelect = (selectedOption, questionId) => {
-    const existingResultIndex = questionResults.findIndex(
-      (result) => result.id === questionId
-    );
-
-    const question = verbalQuestionsData.find((item) => item.id === questionId);
-    const isCorrect = selectedOption === question.answer;
-    const score = isCorrect ? question.points : 0;
-
-    const updatedResults = [...questionResults];
-
-    if (existingResultIndex !== -1) {
-      updatedResults[existingResultIndex] = {
-        id: questionId,
-        selectedAnswer: selectedOption,
-        isCorrect: isCorrect,
-        score: score,
-      };
-    } else {
-      updatedResults.push({
-        id: questionId,
-        selectedAnswer: selectedOption,
-        isCorrect: isCorrect,
-        score: score,
-      });
-    }
-
-    setQuestionResults(updatedResults);
-  };
-
-  const handleSubmit = () => {
-    submitResults(questionResults);
-    console.log("Submitted results:", questionResults);
-  };
-
-  const totalScore = questionResults.reduce(
-    (total, result) => total + result.score,
-    0
-  );
 
   return (
     <>
@@ -80,10 +93,23 @@ const TestInterface = () => {
                     <span className="text-sm rounded-xl border-[1px] py-1 px-3">
                       {data?.points} Points
                     </span>
-                    <BookmarkBorderIcon className="cursor-pointer text-gray-500" />
+                    {markedForReview[i] ? (
+                      <BookmarkIcon
+                        className="cursor-pointer text-orange-500"
+                        onClick={() => handleMarkForReview(i)}
+                      />
+                    ) : (
+                      <BookmarkBorderIcon
+                        className="cursor-pointer text-gray-500"
+                        onClick={() => handleMarkForReview(i)}
+                      />
+                    )}
                     <CachedIcon
-                      className="cursor-pointer text-gray-500 "
-                      sx={{ display: "hidden" }}
+                      className="cursor-pointer text-gray-500"
+                      onClick={() => handleOptionSelect(i, null)}
+                      style={{
+                        display: selectedOptions[i] !== null ? "block" : "none",
+                      }}
                     />
                   </div>
                 </div>
@@ -93,16 +119,15 @@ const TestInterface = () => {
                 <div className="options">
                   <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
-                    name="radio-buttons-group"
-                    onChange={(e) =>
-                      handleOptionSelect(e.target.value, data.id)
-                    }>
-                    {data?.options?.map((option) => (
+                    name="radio-buttons-group">
+                    {data?.options?.map((option, index) => (
                       <FormControlLabel
                         key={option}
                         value={option}
                         control={<Radio size="small" />}
                         label={option}
+                        checked={selectedOptions[i] === index}
+                        onChange={() => handleOptionSelect(i, index)}
                       />
                     ))}
                   </RadioGroup>{" "}
@@ -140,15 +165,25 @@ const TestInterface = () => {
             <div className="border-[1px] shadow-sm rounded-xl p-5">
               <h3 className="font-semibold">Questions</h3>
               <div className="py-2">
-                <p>Answered: 0</p>
-                <p>Unanswered: 6</p>
-                <p>Marked For Review: 0</p>
+                <p>Answered: {answeredCount}</p>
+                <p>Unanswered: {unansweredCount}</p>
+                <p>
+                  Marked For Review:{" "}
+                  {markedForReview.filter((review) => review).length}
+                </p>
               </div>
               <div className="flex items-center flex-wrap justify-center gap-5 py-3">
                 {verbalQuestionsData.map((e, i) => (
                   <div
-                    className="rounded-md flex items-center justify-center border-[1px] w-10 h-10 border-blue-600 bg-blue-100 p-3"
-                    key={i}>
+                    key={i}
+                    className={`rounded-md flex items-center justify-center border-[1px] w-10 h-10 p-3 cursor-pointer ${
+                      markedForReview[i]
+                        ? "bg-orange-100 border-orange-600"
+                        : selectedOptions[i] !== null
+                        ? "bg-green-100 border-green-600"
+                        : "border-blue-600 bg-blue-100"
+                    }`}
+                    onClick={() => handleMarkForReview(i)}>
                     {i + 1}
                   </div>
                 ))}
