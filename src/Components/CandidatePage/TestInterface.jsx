@@ -1,71 +1,159 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CachedIcon from "@mui/icons-material/Cached";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { verbalQuestionsData } from "../../helper/mainData";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { verbalQuestionsData } from "../../helper/mainData";
+import { useDispatch } from "react-redux";
+import { addToResult } from "../../Features/Result/ResultSlice";
+import { currentQuestions } from "../../Features/CurrentQuestions/QuestionSlice";
+import { useNavigate } from "react-router-dom";
 
 const TestInterface = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [selectedOptions, setSelectedOptions] = useState(
+    Array(verbalQuestionsData.length).fill(null)
+  );
+  const [answeredCount, setAnsweredCount] = useState(0);
+  const [unansweredCount, setUnansweredCount] = useState(
+    verbalQuestionsData.length
+  );
+  const [markedForReview, setMarkedForReview] = useState(
+    Array(verbalQuestionsData.length).fill(false)
+  );
+
+  const handleOptionSelect = (questionIndex, optionIndex) => {
+    const updatedSelectedOptions = [...selectedOptions];
+    updatedSelectedOptions[questionIndex] = optionIndex;
+    setSelectedOptions(updatedSelectedOptions);
+
+    if (selectedOptions[questionIndex] === null) {
+      setAnsweredCount(answeredCount + 1);
+      setUnansweredCount(unansweredCount - 1);
+    }
+  };
+
+  const handleMarkForReview = (questionIndex) => {
+    const updatedMarkedForReview = [...markedForReview];
+    updatedMarkedForReview[questionIndex] = !markedForReview[questionIndex];
+    setMarkedForReview(updatedMarkedForReview);
+  };
+
+  const handleSubmit = () => {
+    const questionResults = verbalQuestionsData.map((data, i) => {
+      const selectedOptionIndex = selectedOptions[i];
+      const selectedOption = data.options[selectedOptionIndex];
+      const isCorrect = selectedOption === data.answer;
+      const score = isCorrect ? data.points : 0;
+
+      return {
+        id: data.id,
+        selectedAnswer: selectedOption,
+        isCorrect: isCorrect,
+        score: score,
+      };
+    });
+
+    dispatch(addToResult(questionResults));
+    dispatch(currentQuestions(verbalQuestionsData));
+    navigate("/user/result");
+  };
+
+  const children = ({ remainingTime }) => {
+    const hours = Math.floor(remainingTime / 3600);
+    const minutes = Math.floor((remainingTime % 3600) / 60);
+    const seconds = remainingTime % 60;
+
+    return (
+      <div className="text-xl">
+        {hours}:{minutes}:{seconds}
+      </div>
+    );
+  };
+
   return (
     <>
-      <div className="px-24 py-10 ">
-        <div className="flex justify-between relative">
-          <div className="w-[60%]">
-            {verbalQuestionsData.map((data, i) => {
-              return (
-                <div
-                  className="rounded-md shadow-md px-7 py-4 border-[1px] mb-5"
-                  key={data?.id}>
-                  <div className="questionNumber flex justify-between">
-                    <p>Question {i + 1}</p>
-                    <div className="flex gap-2 items-center">
-                      <span className="text-sm rounded-xl border-[1px] py-1 px-3">
-                        2 Points{" "}
-                      </span>
-                      <BookmarkBorderIcon className="cursor-pointer text-gray-500" />
-                      <CachedIcon
-                        className="cursor-pointer text-gray-500 "
-                        sx={{ display: "hidden" }}
+      <div className="md:px-24 px-8  py-10 ">
+        <div className="flex md:justify-between justify-center relative">
+          <div className="md:w-[60%] w-full">
+            {verbalQuestionsData.map((data, i) => (
+              <div
+                className="rounded-md shadow-md px-7 py-4 border-[1px] mb-5"
+                key={data?.id}>
+                <div className="questionNumber flex justify-between">
+                  <p>Question {i + 1}</p>
+                  <div className="flex gap-2 items-center">
+                    <span className="text-sm rounded-xl border-[1px] py-1 px-3">
+                      {data?.points} Points
+                    </span>
+                    {markedForReview[i] ? (
+                      <BookmarkIcon
+                        className="cursor-pointer text-orange-500"
+                        onClick={() => handleMarkForReview(i)}
                       />
-                    </div>
-                  </div>
-                  <div className="question py-2">
-                    <p>{data?.question}</p>
-                  </div>
-                  <div className="options">
-                    <RadioGroup
-                      aria-labelledby="demo-radio-buttons-group-label"
-                      name="radio-buttons-group">
-                      {data?.options?.map((options) => {
-                        return (
-                          <FormControlLabel
-                            value={options}
-                            control={<Radio size="small" />}
-                            label={options}
-                          />
-                        );
-                      })}
-                    </RadioGroup>{" "}
+                    ) : (
+                      <BookmarkBorderIcon
+                        className="cursor-pointer text-gray-500"
+                        onClick={() => handleMarkForReview(i)}
+                      />
+                    )}
+                    <CachedIcon
+                      className="cursor-pointer text-gray-500"
+                      onClick={() => handleOptionSelect(i, null)}
+                      style={{
+                        display: selectedOptions[i] !== null ? "block" : "none",
+                      }}
+                    />
                   </div>
                 </div>
-              );
-            })}
+                <div className="question py-2">
+                  <p>{data?.question}</p>
+                </div>
+                <div className="options">
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    name="radio-buttons-group">
+                    {data?.options?.map((option, index) => (
+                      <FormControlLabel
+                        key={option}
+                        value={option}
+                        control={<Radio size="small" />}
+                        label={option}
+                        checked={selectedOptions[i] === index}
+                        onChange={() => handleOptionSelect(i, index)}
+                      />
+                    ))}
+                  </RadioGroup>{" "}
+                </div>
+              </div>
+            ))}
+
+            <div className="flex justify-end">
+              <button
+                className="bg-blue-800 text-white px-4 py-2 rounded-sm "
+                onClick={handleSubmit}>
+                Submit
+              </button>
+            </div>
           </div>
 
-          <div className=" flex flex-col gap-10 fixed right-20 top-[23%]">
+          <div className=" hidden md:flex flex-col gap-10 fixed right-14 top-[23%] w-[35%]">
             <div className="border-[1px] shadow-sm rounded-xl p-5">
               <p>Time Left</p>
               <div className="flex justify-center">
                 <CountdownCircleTimer
                   isPlaying
-                  duration={40}
+                  duration={300}
                   colors={["#9582b4", "#A30000"]}
                   colorsTime={[30, 35]}>
-                  {({ remainingTime }) => remainingTime}
+                  {children}
                 </CountdownCircleTimer>
               </div>
             </div>
@@ -77,20 +165,28 @@ const TestInterface = () => {
             <div className="border-[1px] shadow-sm rounded-xl p-5">
               <h3 className="font-semibold">Questions</h3>
               <div className="py-2">
-                <p>Answered: 0</p>
-                <p>Unanswered: 6</p>
-                <p>Marked For Review: 0</p>
+                <p>Answered: {answeredCount}</p>
+                <p>Unanswered: {unansweredCount}</p>
+                <p>
+                  Marked For Review:{" "}
+                  {markedForReview.filter((review) => review).length}
+                </p>
               </div>
               <div className="flex items-center flex-wrap justify-center gap-5 py-3">
-                {verbalQuestionsData.map((e, i) => {
-                  return (
-                    <div
-                      className="rounded-md flex items-center justify-center border-[1px] w-10 h-10 border-blue-600 bg-blue-100 p-3"
-                      key={i}>
-                      {i + 1}
-                    </div>
-                  );
-                })}
+                {verbalQuestionsData.map((e, i) => (
+                  <div
+                    key={i}
+                    className={`rounded-md flex items-center justify-center border-[1px] w-10 h-10 p-3 cursor-pointer ${
+                      markedForReview[i]
+                        ? "bg-orange-100 border-orange-600"
+                        : selectedOptions[i] !== null
+                        ? "bg-green-100 border-green-600"
+                        : "border-blue-600 bg-blue-100"
+                    }`}
+                    onClick={() => handleMarkForReview(i)}>
+                    {i + 1}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
