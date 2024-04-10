@@ -5,8 +5,8 @@ import TestNavBar from "../TestNavBar/TestNavBar";
 const CandidatePageLayout = () => {
   return (
     <>
-      <TestNavBar />
-      <div className="">
+      <div className="h-screen overflow-y-scroll relative">
+        <TestNavBar />
         <Outlet />
       </div>
     </>

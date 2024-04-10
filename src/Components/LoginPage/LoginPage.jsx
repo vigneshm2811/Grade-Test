@@ -31,7 +31,7 @@ const LoginPage = () => {
                 console.log(provider, data);
                 const isAuthSuccessful = true;
                 if (isAuthSuccessful) {
-                  navigate("/recruiter");
+                  navigate("/user/home");
                 }
               }}
               onReject={(err) => {

@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CachedIcon from "@mui/icons-material/Cached";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { verbalQuestionsData } from "../../helper/mainData";
 import { useDispatch } from "react-redux";
 import { addToResult } from "../../Features/Result/ResultSlice";
 import { currentQuestions } from "../../Features/CurrentQuestions/QuestionSlice";
 import { useNavigate } from "react-router-dom";
+import firebaseApp from "../../Firebase/Firebase";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 const TestInterface = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [questions, setQuestions] = useState([]);
 
   const [selectedOptions, setSelectedOptions] = useState(
     Array(verbalQuestionsData.length).fill(null)
@@ -28,6 +30,21 @@ const TestInterface = () => {
   const [markedForReview, setMarkedForReview] = useState(
     Array(verbalQuestionsData.length).fill(false)
   );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    try {
+      const firestore = getFirestore(firebaseApp);
+      const questionsCollection = collection(firestore, "VerbalQuestions");
+      const questionsSnapshot = await getDocs(questionsCollection);
+      const questionsData = questionsSnapshot.docs.map((doc) => doc.data());
+      setQuestions(questionsData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleOptionSelect = (questionIndex, optionIndex) => {
     const updatedSelectedOptions = [...selectedOptions];
@@ -58,6 +75,8 @@ const TestInterface = () => {
         selectedAnswer: selectedOption,
         isCorrect: isCorrect,
         score: score,
+        attempted: selectedOption ? true : false,
+        unAttempted: selectedOption ? false : true,
       };
     });
 
@@ -83,7 +102,7 @@ const TestInterface = () => {
       <div className="md:px-24 px-8  py-10 ">
         <div className="flex md:justify-between justify-center relative">
           <div className="md:w-[60%] w-full">
-            {verbalQuestionsData.map((data, i) => (
+            {questions?.map((data, i) => (
               <div
                 className="rounded-md shadow-md px-7 py-4 border-[1px] mb-5"
                 key={data?.id}>
@@ -156,10 +175,6 @@ const TestInterface = () => {
                   {children}
                 </CountdownCircleTimer>
               </div>
-            </div>
-
-            <div className="border-[1px] shadow-sm rounded-xl p-5">
-              <p>Filter</p>
             </div>
 
             <div className="border-[1px] shadow-sm rounded-xl p-5">

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const TestNavBar = () => {
   return (
-    <div>
+    <div className="sticky top-0  z-10">
       <nav className="bg-gray-100 border-[1px] border-gray-300 text-[#36328a] shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <img
