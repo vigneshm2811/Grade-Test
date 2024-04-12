@@ -23,8 +23,9 @@ const ResultInterface = () => {
     0
   );
 
+
   return (
-    <div>
+    <>
       <div className="md:px-24 px-8  py-10 ">
         <div className="flex  justify-center relative">
           <div className="lg:w-[60%] w-full">
@@ -37,7 +38,9 @@ const ResultInterface = () => {
                     value = QuestionsData[0]?.length;
                     break;
                   case "questionsAttempt":
-                    value = resultData[0]?.length;
+                    value = resultData[0]?.reduce((count, e) => {
+                      return e.attempted ? count + 1 : count;
+                    }, 0);
                     break;
                   case "correctlyAnswered":
                     value = resultData[0]?.reduce((count, e) => {
@@ -69,60 +72,62 @@ const ResultInterface = () => {
               })}
             </div>
 
-            {QuestionsData[0]?.map((data, index) => {
-              const matchData = resultData[0].find((e) => e.id === data.id);
-              console.log("match data", matchData);
-              return (
-                <div
-                  className="rounded-md shadow-md px-7 py-3 border-[1px] mb-5"
-                  key={data?.id}>
-                  <div className="questionNumber flex justify-between">
-                    <p>Question {index + 1}</p>
-                    <div className="flex gap-4  items-center">
-                      {!matchData && (
-                        <p className="status text-red-400 text-sm ">
-                          Not Attempted
-                        </p>
-                      )}
+            <div>
+              {QuestionsData[0]?.map((data, index) => {
+                const matchData = resultData[0].find((e) => e.id === data.id);
+                console.log("match data", matchData);
+                return (
+                  <div
+                    className="rounded-md shadow-md px-7 py-3 border-[1px] mb-5"
+                    key={data?.id}>
+                    <div className="questionNumber flex justify-between">
+                      <p>Question {index + 1}</p>
+                      <div className="flex gap-4  items-center">
+                        {matchData?.unAttempted && (
+                          <p className="status text-red-400 text-sm ">
+                            Not Attempted
+                          </p>
+                        )}
 
-                      <span className="text-sm rounded-xl border-[1px] py-1 px-2">
-                        {data?.points} Points
-                      </span>
+                        <span className="text-sm rounded-xl border-[1px] py-1 px-2">
+                          {data?.points} Points
+                        </span>
+                      </div>
+                    </div>
+                    <div className="question py-2">
+                      <p>{data?.question}</p>
+                    </div>
+                    <div className="options">
+                      {data?.options?.map((options, i) => {
+                        return (
+                          <div key={options} className="my-1">
+                            {matchData?.isCorrect && <div>h</div>}
+                            <input
+                              type="radio"
+                              className={`${
+                                matchData?.isCorrect
+                                  ? "checked:bg-green-400 checked:hover:bg-green-400 "
+                                  : "checked:bg-red-400 checked:hover:bg-red-400"
+                              } bg-gray-100 border-gray-300 `}
+                              checked={
+                                options === matchData?.selectedAnswer
+                                  ? true
+                                  : false
+                              }
+                            />
+                            <label className="ml-3">{options}</label>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
-                  <div className="question py-2">
-                    <p>{data?.question}</p>
-                  </div>
-                  <div className="options">
-                    {data?.options?.map((options, i) => {
-                      return (
-                        <div key={options} className="my-1">
-                          {matchData?.isCorrect && <div>h</div>}
-                          <input
-                            type="radio"
-                            className={`${
-                              matchData?.isCorrect
-                                ? "checked:bg-green-400 checked:hover:bg-green-400 "
-                                : "checked:bg-red-400 checked:hover:bg-red-400"
-                            } bg-gray-100 border-gray-300 `}
-                            checked={
-                              options === matchData?.selectedAnswer
-                                ? true
-                                : false
-                            }
-                          />
-                          <label className="ml-3">{options}</label>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

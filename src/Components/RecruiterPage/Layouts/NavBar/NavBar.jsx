@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useState, useEffect } from "react";
+import { auth } from "../../../../Firebase/Firebase";
 
 const drawerWidth = 260;
 
@@ -29,7 +31,17 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const NavBar = ({ openStatus, handleClose, handleOpen }) => {
+const NavBar = ({ openStatus, handleOpen }) => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+  console.log("user data", user);
   const theme = useTheme();
   const [open, setOpen] = React.useState(openStatus);
 
@@ -60,8 +72,12 @@ const NavBar = ({ openStatus, handleClose, handleOpen }) => {
             }}>
             <MenuIcon />
           </IconButton>
-          <button className="flex items-center justify-center w-10 h-10  rounded-full bg-gray-200 text-grayd">
-            VM
+          <button className="flex items-center justify-center">
+            <img
+              src={user?.photoURL}
+              alt=""
+              className="w-10 h-10 rounded-full"
+            />
           </button>
         </Toolbar>
       </AppBar>
