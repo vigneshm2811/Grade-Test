@@ -10,14 +10,12 @@ export const ResultSlice = createSlice({
     reducers: {
         addToResult: (state, action) => {
             state.push(action.payload);
-        },
-        currentQuestions: (state, action) => {
-            state.push(action.payload);
-        },
+        }
+
 
     }
 })
 
-export const { addToResult, currentQuestions } = ResultSlice.actions
+export const { addToResult } = ResultSlice.actions
 
 export default ResultSlice.reducer

@@ -2,10 +2,16 @@ import React from "react";
 import { TestTypeData } from "../../helper/mainData";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { selectQuestionType } from "../../Features/TestType/TestTypeSlice";
+
 const CandidateHome = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handelSelect = () => {
+
+  const handelSelect = (type) => {
     navigate("/user/test");
+    dispatch(selectQuestionType(type));
   };
 
   return (
@@ -25,7 +31,7 @@ const CandidateHome = () => {
               <div
                 className="group p-4 cursor-pointer bg-gray-100 rounded  grid md:grid-cols-6 items-center gap-4 border-2 border-transparent hover:border-gray-200 "
                 key={e.id}
-                onClick={handelSelect}>
+                onClick={() => handelSelect(e.type)}>
                 <div className="col-span-3  ">
                   <img
                     src={e.image}

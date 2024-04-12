@@ -6,7 +6,7 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CachedIcon from "@mui/icons-material/Cached";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToResult } from "../../Features/Result/ResultSlice";
 import { currentQuestions } from "../../Features/CurrentQuestions/QuestionSlice";
 import { useNavigate } from "react-router-dom";
@@ -16,8 +16,11 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 const TestInterface = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const questionType = useSelector((state) => state.selectQuestionType);
+  console.log(questionType, "qType");
 
   const [questions, setQuestions] = useState([]);
+  const [questionsType, setQuestionsType] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [answeredCount, setAnsweredCount] = useState(0);
   const [unansweredCount, setUnansweredCount] = useState(0);
@@ -25,15 +28,39 @@ const TestInterface = () => {
 
   useEffect(() => {
     fetchData();
+    setQuestionsType(questionType);
   }, []);
 
   const fetchData = async () => {
     try {
       const firestore = getFirestore(firebaseApp);
-      const questionsCollection = collection(firestore, "VerbalQuestions");
+      const questionsCollection = collection(firestore, "Questions");
       const questionsSnapshot = await getDocs(questionsCollection);
       const questionsData = questionsSnapshot.docs.map((doc) => doc.data());
-      setQuestions(questionsData);
+      // setQuestions(questionsData);
+      // console.log(questionsData, "data1");
+
+      switch (questionType) {
+        case "Numeric":
+          setQuestions(
+            questionsData.filter((question) => question.type === "numeric")
+          );
+        case "English Skills":
+          setQuestions(
+            questionsData.filter((question) => question.type === "verbal")
+          );
+        case "Programming":
+          setQuestions(
+            questionsData.filter((question) => question.type === "computer")
+          );
+        case "Custom Test":
+          setQuestions(
+            questionsData.filter((question) => question.type === "computer")
+          );
+
+        default:
+          setQuestions(questionsData);
+      }
       setSelectedOptions(Array(questionsData.length).fill(-1));
       setUnansweredCount(questionsData.length);
       setMarkedForReview(Array(questionsData.length).fill(false));
@@ -183,7 +210,7 @@ const TestInterface = () => {
                   {markedForReview.filter((review) => review).length}
                 </p>
               </div>
-              <div className="flex items-center flex-wrap justify-center gap-5 py-3">
+              <div className="flex items-center flex-wrap justify-center gap-5 py-3 overflow-y-scroll max-h-48">
                 {questions.map((e, i) => (
                   <div
                     key={i}

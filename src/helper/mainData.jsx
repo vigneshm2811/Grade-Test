@@ -77,7 +77,7 @@ export const TestNavBarData = [
 export const TestTypeData = [
   {
     id: 1,
-    type: "Quiz",
+    type: "Numeric",
     description:
       "Test for knowledge of specific skills using Equip's content or your own.",
     image: Quiz,
