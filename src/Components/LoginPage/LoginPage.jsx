@@ -1,56 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import MainLogo from "../../assets/GradeTestLogo.png";
 import GoogleIcon from "../../assets/Logo/GoogleLogo.svg";
 import LinkedInIcon from "../../assets/Logo/LinkedinLogo.png";
-import MainLogo from "../../assets/GradeTestLogo.png";
-import axios from "axios";
-import { LoginFormData } from "../../helper/mainData";
-import { LoginSocialGoogle } from "reactjs-social-login";
 
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
+import { auth, googleProvider } from "../../Firebase/Firebase";
+import { signInWithPopup } from "firebase/auth";
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      navigate("/user/home");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
-    <div className="w-full h-screen flex ">
-      <div className="bg-black w-1/2 flex justify-center items-center">
-        <img src={MainLogo} alt="logo" />
+    <div className="w-full h-screen  md:flex bg-black py-10 md:p-0 ">
+      <div className=" md:w-1/2 w-full md:flex justify-center items-center">
+        <img src={MainLogo} alt="logo" className="mx-auto w-3/4 md:w-auto" />
       </div>
 
-      <div className=" bg-gray-100 w-1/2 flex flex-col justify-center items-center">
-        <div className="w-1/2 max-h-80 min-h-60 shadow-lg flex flex-col items-center justify-center bg-white  py-7 px-12">
+      <div className=" md:bg-gray-100 w-full  md:w-1/2 flex flex-col justify-center items-center">
+        <div className="lg:w-1/2 w-4/5 max-h-80 min-h-60 shadow-lg flex flex-col items-center justify-center bg-white  py-7 px-7 lg:px-12">
           <h1 className="text-center text-3xl font-bold">Hello!</h1>
 
-          <div className="w-11/12">
-            <LoginSocialGoogle
-              client_id="111056746863-3e2quek4ae0m277pc59lbh8ui0rsd0ak.apps.googleusercontent.com"
-              access_type="offline"
-              onResolve={({ provider, data }) => {
-                console.log(provider, data);
-                const isAuthSuccessful = true;
-                if (isAuthSuccessful) {
-                  navigate("/user/home");
-                }
-              }}
-              onReject={(err) => {
-                console.log(err);
-              }}>
-              <Link>
-                <button className="border-[1px] border-slate-200 w-full  my-3 p-2 flex justify-center gap-3 items-center">
-                  <img src={GoogleIcon} alt="" className="w-8  h-8" />
-                  Sign In with Google
-                </button>
-              </Link>
-            </LoginSocialGoogle>
-            <Link to>
+          <div className="md:w-11/12 w-full">
+            <button
+              onClick={handleGoogleSignIn}
+              className="border-[1px] border-slate-200 w-full  my-3 p-2 flex justify-center gap-3 items-center">
+              <img src={GoogleIcon} alt="" className="w-8  h-8" />
+              Sign In with Google
+            </button>
+
+            {/* LinkedIn Sign In Button */}
+            <Link to="/user/home">
               <button className="border-[1px] border-slate-200 w-full  my-3 p-2 flex justify-center gap-3 items-center">
                 <img src={LinkedInIcon} alt="" className="w-8  h-8" />
                 Sign In with LinkedIn
               </button>
             </Link>
           </div>
+
+          {error && <p className="text-red-500">{error}</p>}
 
           <div className="mt-5">
             <p className="text-center text-sm">

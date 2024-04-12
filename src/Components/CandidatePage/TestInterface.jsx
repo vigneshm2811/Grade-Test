@@ -6,7 +6,6 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CachedIcon from "@mui/icons-material/Cached";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { verbalQuestionsData } from "../../helper/mainData";
 import { useDispatch } from "react-redux";
 import { addToResult } from "../../Features/Result/ResultSlice";
 import { currentQuestions } from "../../Features/CurrentQuestions/QuestionSlice";
@@ -19,21 +18,15 @@ const TestInterface = () => {
   const navigate = useNavigate();
 
   const [questions, setQuestions] = useState([]);
-
-  const [selectedOptions, setSelectedOptions] = useState(
-    Array(verbalQuestionsData.length).fill(null)
-  );
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [answeredCount, setAnsweredCount] = useState(0);
-  const [unansweredCount, setUnansweredCount] = useState(
-    verbalQuestionsData.length
-  );
-  const [markedForReview, setMarkedForReview] = useState(
-    Array(verbalQuestionsData.length).fill(false)
-  );
+  const [unansweredCount, setUnansweredCount] = useState(0);
+  const [markedForReview, setMarkedForReview] = useState([]);
 
   useEffect(() => {
     fetchData();
   }, []);
+
   const fetchData = async () => {
     try {
       const firestore = getFirestore(firebaseApp);
@@ -41,6 +34,9 @@ const TestInterface = () => {
       const questionsSnapshot = await getDocs(questionsCollection);
       const questionsData = questionsSnapshot.docs.map((doc) => doc.data());
       setQuestions(questionsData);
+      setSelectedOptions(Array(questionsData.length).fill(-1));
+      setUnansweredCount(questionsData.length);
+      setMarkedForReview(Array(questionsData.length).fill(false));
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +47,7 @@ const TestInterface = () => {
     updatedSelectedOptions[questionIndex] = optionIndex;
     setSelectedOptions(updatedSelectedOptions);
 
-    if (selectedOptions[questionIndex] === null) {
+    if (selectedOptions[questionIndex] === -1) {
       setAnsweredCount(answeredCount + 1);
       setUnansweredCount(unansweredCount - 1);
     }
@@ -64,7 +60,7 @@ const TestInterface = () => {
   };
 
   const handleSubmit = () => {
-    const questionResults = verbalQuestionsData.map((data, i) => {
+    const questionResults = questions.map((data, i) => {
       const selectedOptionIndex = selectedOptions[i];
       const selectedOption = data.options[selectedOptionIndex];
       const isCorrect = selectedOption === data.answer;
@@ -81,7 +77,7 @@ const TestInterface = () => {
     });
 
     dispatch(addToResult(questionResults));
-    dispatch(currentQuestions(verbalQuestionsData));
+    dispatch(currentQuestions(questions));
     navigate("/user/result");
   };
 
@@ -127,7 +123,7 @@ const TestInterface = () => {
                       className="cursor-pointer text-gray-500"
                       onClick={() => handleOptionSelect(i, null)}
                       style={{
-                        display: selectedOptions[i] !== null ? "block" : "none",
+                        display: selectedOptions[i] !== -1 ? "block" : "none",
                       }}
                     />
                   </div>
@@ -188,13 +184,13 @@ const TestInterface = () => {
                 </p>
               </div>
               <div className="flex items-center flex-wrap justify-center gap-5 py-3">
-                {verbalQuestionsData.map((e, i) => (
+                {questions.map((e, i) => (
                   <div
                     key={i}
                     className={`rounded-md flex items-center justify-center border-[1px] w-10 h-10 p-3 cursor-pointer ${
                       markedForReview[i]
                         ? "bg-orange-100 border-orange-600"
-                        : selectedOptions[i] !== null
+                        : selectedOptions[i] !== -1
                         ? "bg-green-100 border-green-600"
                         : "border-blue-600 bg-blue-100"
                     }`}

@@ -9,7 +9,7 @@ const CandidateHome = () => {
   };
 
   return (
-    <div className="lg:px-60  px-20 py-8">
+    <div className="lg:px-60 px-10  md:px-20 py-8">
       <div className="flex flex-col justify-center items-center">
         <div>
           <h1 className="font-semibold text-3xl">Different Test Types</h1>

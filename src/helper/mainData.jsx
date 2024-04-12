@@ -60,17 +60,17 @@ export const TestNavBarData = [
   {
     id: 1,
     label: "Home",
-    Path: "",
+    Path: "/user/home",
   },
   {
     id: 2,
     label: "Test type",
-    Path: "",
+    Path: "/user/test",
   },
   {
     id: 3,
     label: "Resource",
-    Path: "",
+    Path: "/user/home",
   },
 ];
 

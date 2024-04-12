@@ -46,8 +46,9 @@ const AppRouter = (
         <Route path="attempts" element={<LatestAttemptTab />} />
       </Route>
       <Route path="/user" element={<CandidatePageLayout />}>
-        <Route path="test" element={<TestInterface />} />
+        <Route path="" element={<CandidateHome />} />
         <Route path="home" element={<CandidateHome />} />
+        <Route path="test" element={<TestInterface />} />
         <Route path="result" element={<ResultInterface />} />
       </Route>
     </Routes>
