@@ -1,4 +1,4 @@
-import logo from "../../assets/Logo/LogoOriginal.png";
+import logo from "../../assets/Logo/GradeTestLogo.png";
 import { TestNavBarData } from "../../helper/mainData";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -43,15 +43,15 @@ const TestNavBar = () => {
 
   return (
     <div className="sticky top-0  z-10">
-      <nav className="bg-gray-100 border-[1px] border-gray-300 text-[#36328a] shadow-md">
+      <nav className="bg-[#060430] border-[1px] border-gray-300 text-white shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <img
             src={logo}
             alt="logo"
-            className="h-14 w-32 cursor-pointer rounded-md"
+            className="h-14 w-32 cursor-pointer "
           />
           <div className="flex items-center  md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse cursor-pointer">
-            <span className=" text-xl text-black me-2">
+            <span className=" text-xl  me-2">
               Hi, {user?.displayName}
             </span>
             <Menu

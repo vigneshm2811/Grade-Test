@@ -25,7 +25,7 @@ const MyComponent = () => {
     <div>
       <h1>Questions</h1>
       {error && <p>Error: {error}</p>}
-      <ul>
+      {/* <ul>
         {questions.map((question) => (
           <li key={question.id}>
             <p>Question: {question.question}</p>
@@ -34,7 +34,7 @@ const MyComponent = () => {
             <p>Points: {question.points}</p>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 };

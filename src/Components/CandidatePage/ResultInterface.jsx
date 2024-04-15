@@ -101,7 +101,7 @@ const ResultInterface = () => {
                       {data?.options?.map((options, i) => {
                         return (
                           <div key={options} className="my-1">
-                            {matchData?.isCorrect && <div>h</div>}
+                            {/* {matchData?.isCorrect && <div>h</div>} */}
                             <input
                               type="radio"
                               className={`${

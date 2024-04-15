@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 
 const HomePage = () => {
   return (
-    <div className="w-full h-screen flex ">
-      <div className="bg-black w-1/2 flex justify-center items-center">
-        <img src={MainLogo} alt="logo" />
+    <div className="w-full h-screen flex-col flex  md:flex-row bg-[#28208c]">
+      <div className="bg-black md:w-1/2 flex justify-center items-center">
+        <img src={MainLogo} alt="logo" className="w-[60%]"/>
       </div>
 
-      <div className="bg-[#28208c] text-white w-1/2 flex flex-col justify-center items-center">
+      <div className="bg-[#28208c] text-white md:w-1/2 flex flex-col justify-center items-center">
         <h1 className="text-center text-5xl font-normal py-5 tracking-wider	 leading-snug">
           GREAT THINGS <br /> ARE COMING
         </h1>

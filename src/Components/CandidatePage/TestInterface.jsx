@@ -12,6 +12,7 @@ import { currentQuestions } from "../../Features/CurrentQuestions/QuestionSlice"
 import { useNavigate } from "react-router-dom";
 import firebaseApp from "../../Firebase/Firebase";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import Upload from "../Upload";
 
 const TestInterface = () => {
   const dispatch = useDispatch();
@@ -20,16 +21,22 @@ const TestInterface = () => {
   console.log(questionType, "qType");
 
   const [questions, setQuestions] = useState([]);
-  const [questionsType, setQuestionsType] = useState(null);
+  const [questionsType, setQuestionsType] = useState();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [answeredCount, setAnsweredCount] = useState(0);
   const [unansweredCount, setUnansweredCount] = useState(0);
   const [markedForReview, setMarkedForReview] = useState([]);
 
   useEffect(() => {
-    fetchData();
+    
     setQuestionsType(questionType);
-  }, []);
+  }, [questionType]);
+  console.log(questionsType,"qType after")
+
+  useEffect(() => {
+    fetchData();
+ 
+  }, [questionsType]);
 
   const fetchData = async () => {
     try {
@@ -37,30 +44,33 @@ const TestInterface = () => {
       const questionsCollection = collection(firestore, "Questions");
       const questionsSnapshot = await getDocs(questionsCollection);
       const questionsData = questionsSnapshot.docs.map((doc) => doc.data());
-      // setQuestions(questionsData);
-      // console.log(questionsData, "data1");
+ 
 
-      switch (questionType) {
+      switch (questionsType) {
         case "Numeric":
           setQuestions(
             questionsData.filter((question) => question.type === "numeric")
           );
+          break;
         case "English Skills":
           setQuestions(
             questionsData.filter((question) => question.type === "verbal")
           );
+          break;
         case "Programming":
           setQuestions(
             questionsData.filter((question) => question.type === "computer")
           );
+          break;
         case "Custom Test":
           setQuestions(
             questionsData.filter((question) => question.type === "computer")
           );
-
+          break;
         default:
           setQuestions(questionsData);
       }
+      
       setSelectedOptions(Array(questionsData.length).fill(-1));
       setUnansweredCount(questionsData.length);
       setMarkedForReview(Array(questionsData.length).fill(false));
@@ -92,6 +102,7 @@ const TestInterface = () => {
       const selectedOption = data.options[selectedOptionIndex];
       const isCorrect = selectedOption === data.answer;
       const score = isCorrect ? data.points : 0;
+      const correctAnswer = data.answer;
 
       return {
         id: data.id,
@@ -100,6 +111,7 @@ const TestInterface = () => {
         score: score,
         attempted: selectedOption ? true : false,
         unAttempted: selectedOption ? false : true,
+        answer:correctAnswer,
       };
     });
 
@@ -230,6 +242,7 @@ const TestInterface = () => {
           </div>
         </div>
       </div>
+      {/* <Upload/> */}
     </>
   );
 };
