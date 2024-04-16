@@ -72,13 +72,16 @@ const NavBar = ({ openStatus, handleOpen }) => {
             }}>
             <MenuIcon />
           </IconButton>
+        <div className="flex items-center gap-3">
           <button className="flex items-center justify-center">
             <img
               src={user?.photoURL}
               alt=""
               className="w-10 h-10 rounded-full"
-            />
+              />
           </button>
+              {/* <p>{user?.displayName}</p> */}
+        </div>
         </Toolbar>
       </AppBar>
     </div>
