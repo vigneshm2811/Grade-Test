@@ -15,6 +15,8 @@ const CandidateHome = () => {
   };
 
   return (
+    <>
+    
     <div className="lg:px-60 px-10  md:px-20 py-8">
       <div className="flex flex-col justify-center items-center">
         <div>
@@ -55,6 +57,7 @@ const CandidateHome = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

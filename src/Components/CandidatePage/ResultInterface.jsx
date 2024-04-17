@@ -1,10 +1,75 @@
 import React, { useEffect, useState } from "react";
 import { verbalQuestionsData, ResultDataCards } from "../../helper/mainData";
 import { useSelector } from "react-redux";
+import firebaseApp, { auth, firestore } from "../../Firebase/Firebase";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
 
 const ResultInterface = () => {
-  const QuestionsData = useSelector((state) => state.currentQuestion);
-  const resultData = useSelector((state) => state.addToResult);
+  // const QuestionsData = useSelector((state) => state.currentQuestion);
+  // const [resultData,setResultData] = useState(useSelector((state) => state.addToResult));
+  const [resultData,setResultData] =useState([]);
+  const [QuestionsData,setQuestionsData] =useState( useSelector((state) => state.currentQuestion));
+  const userId =auth.currentUser?.uid;
+    useEffect(() => {
+      getUserData(userId)
+      getQuestionData(userId)
+      
+    }, [userId])
+    
+    
+    const getUserData = async (userId) => {
+      try {
+        if (userId === auth.currentUser?.uid) {
+          const firestore = getFirestore(firebaseApp);
+          const usersCollection = collection(firestore, "users");
+          const usersSnapshot = await getDocs(usersCollection);
+          const userData = usersSnapshot.docs.map((doc) => doc.data());
+          console.log("userDataF", userData[0]);
+          const data = userData[0]
+          const parsedData =  Object.keys(data).map(key => data[key]);
+          
+          
+          // return userData;
+          console.log("userDataParsed",parsedData)
+          setResultData(parsedData?.filter((data) => data.id))
+        }
+        else{
+          throw new Error("User not found");
+        }
+      } catch (error) {
+        console.error("Error getting user data:", error);
+        return null;
+      }
+    };
+
+
+    const getQuestionData = async (userId) => {
+      try {
+        if (userId === auth.currentUser?.uid) {
+          const firestore = getFirestore(firebaseApp);
+          const usersCollection = collection(firestore, "CurrentQuestions");
+          const usersSnapshot = await getDocs(usersCollection);
+          const userData = usersSnapshot.docs.map((doc) => doc.data());
+          console.log("userDataF", userData[0]);
+          const data = userData[0]
+          const parsedData =  Object.keys(data).map(key => data[key]);
+          
+          
+          // return userData;
+          console.log("questionDataParsed",parsedData)
+          setQuestionsData(parsedData?.filter((data) => data.id))
+        }
+        else{
+          throw new Error("User not found");
+        }
+      } catch (error) {
+        console.error("Error getting user data:", error);
+        return null;
+      }
+    };
+  
+  console.log("new",resultData)
 
   // console.log(
   //   "total",
@@ -14,14 +79,15 @@ const ResultInterface = () => {
 
   // console.log("QuestionsData", QuestionsData);
 
-  const overAllTotal = QuestionsData[0]?.reduce(
+  const overAllTotal = QuestionsData?.reduce(
     (total, result) => total + result?.points,
     0
   );
-  const score = resultData[0]?.reduce(
+  const score =resultData?.reduce(
     (total, result) => total + result?.score,
     0
   );
+  console.log("score",score)
 
 
   return (
@@ -35,15 +101,16 @@ const ResultInterface = () => {
                 let value = "";
                 switch (e.type) {
                   case "noOfQuestion":
-                    value = QuestionsData[0]?.length;
+                    value = QuestionsData?.length-1;
                     break;
-                  case "questionsAttempt":
-                    value = resultData[0]?.reduce((count, e) => {
-                      return e.attempted ? count + 1 : count;
-                    }, 0);
+                    case "questionsAttempt":
+                      value = resultData?.reduce((count, e) => {
+                        return e.attempted ? count + 1 : count;
+                      }, 0);
+                      console.log("attempted",value);
                     break;
                   case "correctlyAnswered":
-                    value = resultData[0]?.reduce((count, e) => {
+                    value = resultData?.reduce((count, e) => {
                       return e.isCorrect ? count + 1 : count;
                     }, 0);
                     break;
@@ -73,8 +140,8 @@ const ResultInterface = () => {
             </div>
 
             <div>
-              {QuestionsData[0]?.map((data, index) => {
-                const matchData = resultData[0].find((e) => e.id === data.id);
+              {QuestionsData?.map((data, index) => {
+                const matchData = resultData?.find((e) => e.id === data.id);
                 console.log("match data", matchData);
                 return (
                   <div

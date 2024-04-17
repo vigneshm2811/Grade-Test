@@ -1,0 +1,49 @@
+.card {
+    width: 310px;
+  
+    
+    border-radius: 6px;
+
+    .card-image {
+        
+        width: 100%;
+        transition: transform 0.3s ease; 
+        border-radius: 6px 6px 0 0;
+
+        &:hover{
+    transform: scale(0.98);
+
+        }
+      }
+
+      .category {
+        text-transform: uppercase;
+    
+
+
+        &:hover{
+            cursor: pointer;
+        }
+      }
+      .heading {
+        font-weight: 600;
+        color: rgb(88, 87, 87);
+        padding: 7px;
+        &:hover{
+          cursor: pointer;
+      }
+      }
+      
+  }
+  
+ 
+  
+ 
+  
+
+  
+  
+  
+
+
+  
