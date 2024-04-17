@@ -8,7 +8,7 @@ import HomePage from "./Components/HomePage/HomePage.jsx";
 import Layout from "./Layout.jsx";
 import LoginPage from "./Components/LoginPage/LoginPage.jsx";
 import LayoutRecruiterPage from "./Components/RecruiterPage/Layouts/Index.jsx";
-import HomeTab from "./Components/RecruiterPage/TabComponents/HomeTab.jsx";
+import HomeTab from "./Components/RecruiterPage/TabComponents/Home/HomeTab.jsx";
 import CustomTestTab from "./Components/RecruiterPage/TabComponents/CustomTestTab.jsx";
 import ProfileTab from "./Components/RecruiterPage/TabComponents/ProfileTab.jsx";
 import LatestAttemptTab from "./Components/RecruiterPage/TabComponents/LatestAttemptTab.jsx";

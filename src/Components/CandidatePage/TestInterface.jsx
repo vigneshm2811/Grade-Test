@@ -7,11 +7,12 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CachedIcon from "@mui/icons-material/Cached";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useDispatch, useSelector } from "react-redux";
-import { addToResult } from "../../Features/Result/ResultSlice";
+// import { addToResult } from "../../Features/Result/ResultSlice";
 import { currentQuestions } from "../../Features/CurrentQuestions/QuestionSlice";
 import { useNavigate } from "react-router-dom";
-import firebaseApp from "../../Firebase/Firebase";
+import firebaseApp, { auth, firestore } from "../../Firebase/Firebase";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import Upload from "../Upload";
 
 const TestInterface = () => {
@@ -28,14 +29,12 @@ const TestInterface = () => {
   const [markedForReview, setMarkedForReview] = useState([]);
 
   useEffect(() => {
-    
     setQuestionsType(questionType);
   }, [questionType]);
-  console.log(questionsType,"qType after")
+  console.log(questionsType, "qType after");
 
   useEffect(() => {
     fetchData();
- 
   }, [questionsType]);
 
   const fetchData = async () => {
@@ -44,7 +43,6 @@ const TestInterface = () => {
       const questionsCollection = collection(firestore, "Questions");
       const questionsSnapshot = await getDocs(questionsCollection);
       const questionsData = questionsSnapshot.docs.map((doc) => doc.data());
- 
 
       switch (questionsType) {
         case "Numeric":
@@ -70,9 +68,9 @@ const TestInterface = () => {
         default:
           setQuestions(questionsData);
       }
-      
+
       setSelectedOptions(Array(questionsData.length).fill(-1));
-      setUnansweredCount(questionsData.length);
+      setUnansweredCount(questions.length);
       setMarkedForReview(Array(questionsData.length).fill(false));
     } catch (error) {
       console.log(error);
@@ -89,12 +87,67 @@ const TestInterface = () => {
       setUnansweredCount(unansweredCount - 1);
     }
   };
+  const getUserData = async (userId) => {
+    try {
+      if (userId === auth.currentUser?.uid) {
+        const firestore = getFirestore(firebaseApp);
+        const usersCollection = collection(firestore, "users");
+        const usersSnapshot = await getDocs(usersCollection);
+        const userData = usersSnapshot.docs.map((doc) => doc.data());
+        console.log("userDataF", userData);
+        return userData;
+      }
+      else{
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      console.error("Error getting user data:", error);
+      return null;
+    }
+  };
 
   const handleMarkForReview = (questionIndex) => {
     const updatedMarkedForReview = [...markedForReview];
     updatedMarkedForReview[questionIndex] = !markedForReview[questionIndex];
     setMarkedForReview(updatedMarkedForReview);
   };
+    const uploadUserDataArray = async (userData) => {
+      const userId = auth.currentUser.uid;
+      try {
+        // Remove fields with undefined values
+        const sanitizedUserData = Object.fromEntries(
+          Object.entries(userData).filter(([_, value]) => value !== undefined)
+        );
+        // Get a reference to the user's document in Firestore
+        const userRef = doc(firestore, "users", userId);
+        // Upload the sanitized data to Firestore, including the user ID
+        await setDoc(userRef, { userId, ...sanitizedUserData });
+        console.log("Data uploaded successfully!");
+      } catch (error) {
+        console.error("Error uploading data:", error);
+      }
+    };
+
+
+
+    const uploadUserCurrentQuestions = async (CurrentQuestion) => {
+      const userId = auth.currentUser.uid;
+      try {
+        // Remove fields with undefined values
+        const sanitizedUserData = Object.fromEntries(
+          Object.entries(CurrentQuestion).filter(([_, value]) => value !== undefined)
+        );
+        // Get a reference to the user's document in Firestore
+        const userRef = doc(firestore, "CurrentQuestions", userId);
+        // Upload the sanitized data to Firestore, including the user ID
+        await setDoc(userRef, { userId, ...sanitizedUserData });
+        console.log("Data uploaded successfully!");
+      } catch (error) {
+        console.error("Error uploading data:", error);
+      }
+    };
+  
+  console.log("user id", auth.currentUser?.uid);
 
   const handleSubmit = () => {
     const questionResults = questions.map((data, i) => {
@@ -106,16 +159,20 @@ const TestInterface = () => {
 
       return {
         id: data.id,
-        selectedAnswer: selectedOption,
+        selectedAnswer: selectedOption ? selectedOption : null,
         isCorrect: isCorrect,
         score: score,
         attempted: selectedOption ? true : false,
         unAttempted: selectedOption ? false : true,
-        answer:correctAnswer,
+        answer: correctAnswer,
       };
     });
 
-    dispatch(addToResult(questionResults));
+    uploadUserDataArray(questionResults);
+    uploadUserCurrentQuestions(questions)
+    const userId = auth.currentUser?.uid;
+    getUserData(userId);
+    // dispatch(addToResult(questionResults));
     dispatch(currentQuestions(questions));
     navigate("/user/result");
   };

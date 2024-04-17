@@ -9,9 +9,13 @@ import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 //Test Type Images
-import Quiz from "../assets/TestTypeImages/quizTestType.png"
-import English from "../assets/TestTypeImages/englishTestType.png"
-import Program from "../assets/TestTypeImages/programmingTestType.png"
+import Quiz from "../assets/TestTypeImages/quizTestType.png";
+import English from "../assets/TestTypeImages/englishTestType.png";
+import Program from "../assets/TestTypeImages/programmingTestType.png";
+import Developer from "../assets/TestTypeImages/developer.jpg";
+import Mathematics from "../assets/TestTypeImages/maths.jpg";
+import English2 from "../assets/TestTypeImages/English.jpg";
+import CustomTest from "../assets/TestTypeImages/CustomTest.jpg";
 
 export const LoginFormData = [
   {
@@ -54,7 +58,6 @@ export const SideBarData = [
     path: "profile",
   },
 ];
-
 
 export const TestNavBarData = [
   {
@@ -101,11 +104,40 @@ export const TestTypeData = [
     type: "Custom Test",
     description:
       "Test for knowledge of specific skills using Equip's content or your own.",
-    image: English,
+    image: CustomTest,
   },
 ];
 
-
+export const selectTest = [
+  {
+    id: 1,
+    type: "Numeric",
+    description:
+      "Test for knowledge of specific skills using Equip's content or your own.",
+    image: Mathematics,
+  },
+  {
+    id: 2,
+    type: "Programming",
+    description:
+      "Similar to HackerRank. We automatically rank candidates' code. No more manual evaluation.",
+    image: Developer,
+  },
+  {
+    id: 3,
+    type: "English Skills",
+    description:
+      "Listening, Reading, Writing and Speaking tests for language, communication, Grammar & Vocabulary.",
+    image: English2,
+  },
+  {
+    id: 4,
+    type: "Custom Test",
+    description:
+      "Test for knowledge of specific skills using Equip's content or your own.",
+    image: English,
+  },
+];
 
 export const verbalQuestionsData = [
   {
@@ -934,7 +966,3 @@ export const programmingQuestions = [
     type: "computer",
   },
 ];
-
-
-
-

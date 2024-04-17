@@ -72,23 +72,29 @@ export default function LayoutRecruiterPage() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex",height:"100%" }}>
       <CssBaseline />
 
       <NavBar openStatus={open} handleOpen={handleDrawerOpen} />
       <SideBar openStatus={open} handleClose={handleDrawerClose} />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, bgcolor: "#f6f5f5", height: "100%" }}>
         <DrawerHeader />
-        <div className="subNav flex gap-1 items-center">
-          <div>
-            <HomeIcon sx={{ color: "gray" }} />
+        <div className="">
+          <div className="subNav flex gap-1 items-center">
+            <div>
+              <HomeIcon sx={{ color: "gray" }} />
+            </div>
+            <div>
+              <ChevronRightIcon sx={{ color: "gray" }} />
+            </div>
+            <p className="font-semibold">Home</p>
           </div>
           <div>
-            <ChevronRightIcon sx={{ color: "gray" }} />
+            <Outlet />
           </div>
-          <p className="font-semibold">Home</p>
         </div>
-        <Outlet />
       </Box>
     </Box>
   );
