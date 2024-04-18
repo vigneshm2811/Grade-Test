@@ -101,17 +101,17 @@ const ResultInterface = () => {
                 let value = "";
                 switch (e.type) {
                   case "noOfQuestion":
-                    value = QuestionsData?.length-1;
+                    value = QuestionsData?.length;
                     break;
                     case "questionsAttempt":
                       value = resultData?.reduce((count, e) => {
-                        return e.attempted ? count + 1 : count;
+                        return e?.attempted ? count + 1 : count;
                       }, 0);
                       console.log("attempted",value);
                     break;
                   case "correctlyAnswered":
                     value = resultData?.reduce((count, e) => {
-                      return e.isCorrect ? count + 1 : count;
+                      return e?.isCorrect ? count + 1 : count;
                     }, 0);
                     break;
                   case "pointsScored":

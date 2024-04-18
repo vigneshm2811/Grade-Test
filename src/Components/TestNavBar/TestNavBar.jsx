@@ -5,11 +5,25 @@ import React, { useEffect, useState } from "react";
 import { auth } from "../../Firebase/Firebase";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 const TestNavBar = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [open, setOpen] = useState(false);
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "white",
+    boxShadow: 24,
+    p: 4,
+  };
+  const handleClose = () => setOpen(false);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -31,17 +45,39 @@ const TestNavBar = () => {
   };
 
   useEffect(() => {
-    // Subscribe to the Firebase authentication state
+    
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser); // Update the user state when authentication state changes
+      setUser(currentUser); 
     });
 
-    // Unsubscribe from the authentication state listener when the component unmounts
+   
     return () => unsubscribe();
   }, []);
   console.log("user data", user);
 
   return (
+    <> <Modal
+    open={open}
+    onClose={handleClose}
+    aria-labelledby="modal-modal-title"
+    aria-describedby="modal-modal-description">
+    <Box sx={style}>
+      <p className="text-center "> Do you really want to log out?</p>
+
+      <div className="flex justify-center gap-5 mt-4">
+        <button
+          onClick={handleCloseUserMenu}
+          className="bg-blue-900 text-white w-14 py-1 rounded-md">
+          Yes
+        </button>
+        <button
+          onClick={() => handleClose()}
+          className="bg-gray-500 text-white w-14 py-1 h-9  rounded-md">
+          No
+        </button>
+      </div>
+    </Box>
+  </Modal>
     <div className="sticky top-0  z-10">
       <nav className="bg-[#060430] border-[1px] border-gray-300 text-white shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -68,13 +104,13 @@ const TestNavBar = () => {
                 horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}>
-              <MenuItem onClick={handleCloseUserMenu}>
+              onClose={()=>{ setAnchorElUser(null)}}>
+              <MenuItem onClick={()=>setOpen(true)}>
                 <p className="text-center">Log Out</p>
               </MenuItem>
             </Menu>
             <img
-              className="w-12 h-12 rounded-full"
+              className="w-10 h-10 rounded-full"
               src={user?.photoURL}
               alt="user photo"
               onClick={handleOpenUserMenu}
@@ -100,6 +136,7 @@ const TestNavBar = () => {
         </div>
       </nav>
     </div>
+    </>
   );
 };
 

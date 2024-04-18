@@ -14,19 +14,36 @@ import firebaseApp, { auth, firestore } from "../../Firebase/Firebase";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import Upload from "../Upload";
+import Box from "@mui/material/Box";
+
+import Modal from "@mui/material/Modal";
 
 const TestInterface = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const timeSec = 10;
   const questionType = useSelector((state) => state.selectQuestionType);
   console.log(questionType, "qType");
 
   const [questions, setQuestions] = useState([]);
+  const [open, setOpen] = useState(false);
   const [questionsType, setQuestionsType] = useState();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [answeredCount, setAnsweredCount] = useState(0);
   const [unansweredCount, setUnansweredCount] = useState(0);
   const [markedForReview, setMarkedForReview] = useState([]);
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "white",
+
+    boxShadow: 24,
+    p: 4,
+  };
 
   useEffect(() => {
     setQuestionsType(questionType);
@@ -36,6 +53,15 @@ const TestInterface = () => {
   useEffect(() => {
     fetchData();
   }, [questionsType]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("submitted.............");
+      setOpen(true)
+    }, timeSec * 1000);
+  }, []);
+
+  const handleClose = () => setOpen(false);
 
   const fetchData = async () => {
     try {
@@ -96,8 +122,7 @@ const TestInterface = () => {
         const userData = usersSnapshot.docs.map((doc) => doc.data());
         console.log("userDataF", userData);
         return userData;
-      }
-      else{
+      } else {
         throw new Error("User not found");
       }
     } catch (error) {
@@ -111,42 +136,42 @@ const TestInterface = () => {
     updatedMarkedForReview[questionIndex] = !markedForReview[questionIndex];
     setMarkedForReview(updatedMarkedForReview);
   };
-    const uploadUserDataArray = async (userData) => {
-      const userId = auth.currentUser.uid;
-      try {
-        // Remove fields with undefined values
-        const sanitizedUserData = Object.fromEntries(
-          Object.entries(userData).filter(([_, value]) => value !== undefined)
-        );
-        // Get a reference to the user's document in Firestore
-        const userRef = doc(firestore, "users", userId);
-        // Upload the sanitized data to Firestore, including the user ID
-        await setDoc(userRef, { userId, ...sanitizedUserData });
-        console.log("Data uploaded successfully!");
-      } catch (error) {
-        console.error("Error uploading data:", error);
-      }
-    };
+  const uploadUserDataArray = async (userData) => {
+    const userId = auth.currentUser.uid;
+    try {
+      // Remove fields with undefined values
+      const sanitizedUserData = Object.fromEntries(
+        Object.entries(userData).filter(([_, value]) => value !== undefined)
+      );
+      // Get a reference to the user's document in Firestore
+      const userRef = doc(firestore, "users", userId);
+      // Upload the sanitized data to Firestore, including the user ID
+      await setDoc(userRef, { userId, ...sanitizedUserData });
+      console.log("Data uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading data:", error);
+    }
+  };
 
+  const uploadUserCurrentQuestions = async (CurrentQuestion) => {
+    const userId = auth.currentUser.uid;
+    try {
+      // Remove fields with undefined values
+      const sanitizedUserData = Object.fromEntries(
+        Object.entries(CurrentQuestion).filter(
+          ([_, value]) => value !== undefined
+        )
+      );
+      // Get a reference to the user's document in Firestore
+      const userRef = doc(firestore, "CurrentQuestions", userId);
+      // Upload the sanitized data to Firestore, including the user ID
+      await setDoc(userRef, { userId, ...sanitizedUserData });
+      console.log("Data uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading data:", error);
+    }
+  };
 
-
-    const uploadUserCurrentQuestions = async (CurrentQuestion) => {
-      const userId = auth.currentUser.uid;
-      try {
-        // Remove fields with undefined values
-        const sanitizedUserData = Object.fromEntries(
-          Object.entries(CurrentQuestion).filter(([_, value]) => value !== undefined)
-        );
-        // Get a reference to the user's document in Firestore
-        const userRef = doc(firestore, "CurrentQuestions", userId);
-        // Upload the sanitized data to Firestore, including the user ID
-        await setDoc(userRef, { userId, ...sanitizedUserData });
-        console.log("Data uploaded successfully!");
-      } catch (error) {
-        console.error("Error uploading data:", error);
-      }
-    };
-  
   console.log("user id", auth.currentUser?.uid);
 
   const handleSubmit = () => {
@@ -167,13 +192,14 @@ const TestInterface = () => {
         answer: correctAnswer,
       };
     });
-
+    handleClose();
     uploadUserDataArray(questionResults);
-    uploadUserCurrentQuestions(questions)
+    uploadUserCurrentQuestions(questions);
     const userId = auth.currentUser?.uid;
     getUserData(userId);
     // dispatch(addToResult(questionResults));
     dispatch(currentQuestions(questions));
+
     navigate("/user/result");
   };
 
@@ -191,6 +217,28 @@ const TestInterface = () => {
 
   return (
     <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <p className="text-center "> Are you want to submit</p>
+
+          <div className="flex justify-center gap-5 mt-4">
+            <button
+              onClick={ handleSubmit}
+              className="bg-blue-900 text-white w-14 py-1 rounded-md">
+              Yes
+            </button>
+            <button
+              onClick={() => handleClose()}
+              className="bg-gray-500 text-white w-14 py-1 h-9  rounded-md">
+              No
+            </button>
+          </div>
+        </Box>
+      </Modal>
       <div className="md:px-24 px-8  py-10 ">
         <div className="flex md:justify-between justify-center relative">
           <div className="md:w-[60%] w-full">
@@ -249,7 +297,9 @@ const TestInterface = () => {
             <div className="flex justify-end">
               <button
                 className="bg-blue-800 text-white px-4 py-2 rounded-sm "
-                onClick={handleSubmit}>
+                onClick={() => {
+                  setOpen(true);
+                }}>
                 Submit
               </button>
             </div>
@@ -261,7 +311,7 @@ const TestInterface = () => {
               <div className="flex justify-center">
                 <CountdownCircleTimer
                   isPlaying
-                  duration={300}
+                  duration={timeSec}
                   colors={["#9582b4", "#A30000"]}
                   colorsTime={[30, 35]}>
                   {children}

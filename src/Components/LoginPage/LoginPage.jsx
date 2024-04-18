@@ -64,6 +64,7 @@ const LoginPage = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
+        console.log("details",userCredential)
         navigate("/user/home");
       })
       .catch((error) => {

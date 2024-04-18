@@ -111,23 +111,23 @@ export const TestTypeData = [
 export const selectTest = [
   {
     id: 1,
-    type: "Numeric",
+    type: "Quantitative",
     description:
-      "Test for knowledge of specific skills using Equip's content or your own.",
+      "Quantitative Aptitude Test",
     image: Mathematics,
   },
   {
     id: 2,
     type: "Programming",
     description:
-      "Similar to HackerRank. We automatically rank candidates' code. No more manual evaluation.",
+      "Programming Basic MCQ",
     image: Developer,
   },
   {
     id: 3,
     type: "English Skills",
     description:
-      "Listening, Reading, Writing and Speaking tests for language, communication, Grammar & Vocabulary.",
+      "Verbal Ability Test",
     image: English2,
   },
   {
@@ -135,7 +135,7 @@ export const selectTest = [
     type: "Custom Test",
     description:
       "Test for knowledge of specific skills using Equip's content or your own.",
-    image: English,
+    image: CustomTest,
   },
 ];
 

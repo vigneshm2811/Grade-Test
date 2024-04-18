@@ -72,14 +72,15 @@ export default function LayoutRecruiterPage() {
   };
 
   return (
-    <Box sx={{ display: "flex",height:"100%" }}>
+    <Box sx={{ display: "flex",height:"100vh" }}>
       <CssBaseline />
 
-      <NavBar openStatus={open} handleOpen={handleDrawerOpen} />
       <SideBar openStatus={open} handleClose={handleDrawerClose} />
+      
+      <NavBar openStatus={open} handleOpen={handleDrawerOpen} />
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, bgcolor: "#f6f5f5", height: "100%" }}>
+        sx={{ flexGrow: 1, p: 3, bgcolor: "#f6f5f5", height: "100%", width: `calc(100% - ${drawerWidth}px)`, }}>
         <DrawerHeader />
         <div className="">
           <div className="subNav flex gap-1 items-center">
