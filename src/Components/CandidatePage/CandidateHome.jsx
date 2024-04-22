@@ -1,23 +1,33 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { TestTypeData } from "../../helper/mainData";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { selectQuestionType } from "../../Features/TestType/TestTypeSlice";
+import Loader from "../Loader/Loader";
 
 const CandidateHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(true);
+
 
   const handelSelect = (type) => {
     navigate("/user/test");
     dispatch(selectQuestionType(type));
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setOpen(false);
+    }, 1000);
+  })
+
   return (
     <>
-    
-    <div className="lg:px-60 px-10  md:px-20 py-8">
+    {
+      open ?(<Loader/>):(
+        <div className="lg:px-60 px-10  md:px-20 py-8">
       <div className="flex flex-col justify-center items-center">
         <div>
           <h1 className="font-semibold text-3xl">Different Test Types</h1>
@@ -57,6 +67,12 @@ const CandidateHome = () => {
         </div>
       </div>
     </div>
+      )
+
+
+    }
+    
+    
     </>
   );
 };

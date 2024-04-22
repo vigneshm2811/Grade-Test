@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { verbalQuestionsData, ResultDataCards } from "../../helper/mainData";
 import { useSelector } from "react-redux";
 import firebaseApp, { auth, firestore } from "../../Firebase/Firebase";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, getDocs, setDoc, doc } from "firebase/firestore";
 
 
 const ResultInterface = () => {
@@ -14,8 +14,11 @@ const ResultInterface = () => {
     useEffect(() => {
       getUserData(userId)
       getQuestionData(userId)
+      uploadResults()
       
     }, [userId])
+
+
     
     
     const getUserData = async (userId) => {
@@ -87,7 +90,47 @@ const ResultInterface = () => {
     (total, result) => total + result?.score,
     0
   );
+
+  const attemptedQuestions = resultData?.reduce((count, e) => {
+    return e?.attempted ? count + 1 : count;
+  }, 0)
+
+  const correctAnswer =resultData?.reduce((count, e) => {
+    return e?.isCorrect ? count + 1 : count;
+  }, 0);
   console.log("score",score)
+
+  const uploadResults = async()=>{
+    const userResultData =[]
+    const resultData ={
+      userId:auth.currentUser?.uid,
+      userImage: auth.currentUser?.photoURL,
+      userName:auth.currentUser?.displayName,
+      userEmail:auth.currentUser?.email,
+      scoreObtained:score,
+      TotalScore:overAllTotal,
+      totalQuestions:QuestionsData?.length,
+      attemptedQuestions :attemptedQuestions,
+      correctAnswer :correctAnswer,
+    }
+    userResultData.push(resultData);
+
+    const db = getFirestore(firebaseApp);
+    
+    const userId = auth?.currentUser?.uid;
+    try {
+    
+   
+      const userRef = doc(firestore, "userResults", userId);
+
+      await setDoc(userRef, { userId, ...resultData });
+      console.log("Data uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading data:", error);
+    }
+  }
+    
+  
 
 
   return (

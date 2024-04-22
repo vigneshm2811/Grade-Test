@@ -12,10 +12,10 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import Quiz from "../assets/TestTypeImages/quizTestType.png";
 import English from "../assets/TestTypeImages/englishTestType.png";
 import Program from "../assets/TestTypeImages/programmingTestType.png";
-import Developer from "../assets/TestTypeImages/developer.jpg";
-import Mathematics from "../assets/TestTypeImages/maths.jpg";
-import English2 from "../assets/TestTypeImages/English.jpg";
-import CustomTest from "../assets/TestTypeImages/CustomTest.jpg";
+import Developer from "../assets/TestTypeImages/developer.png";
+import Mathematics from "../assets/TestTypeImages/maths.png";
+import English2 from "../assets/TestTypeImages/English.png";
+import CustomTest from "../assets/TestTypeImages/CustomTest.png";
 
 export const LoginFormData = [
   {

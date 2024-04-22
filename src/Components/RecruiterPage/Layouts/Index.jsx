@@ -80,7 +80,7 @@ export default function LayoutRecruiterPage() {
       <NavBar openStatus={open} handleOpen={handleDrawerOpen} />
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, bgcolor: "#f6f5f5", height: "100%", width: `calc(100% - ${drawerWidth}px)`, }}>
+        sx={{ flexGrow: 1, p: 3,  width: `calc(100% - ${drawerWidth}px)`, }}>
         <DrawerHeader />
         <div className="">
           <div className="subNav flex gap-1 items-center">

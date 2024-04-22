@@ -21,7 +21,7 @@ import Modal from "@mui/material/Modal";
 const TestInterface = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const timeSec = 10;
+  const timeSec = 300;
   const questionType = useSelector((state) => state.selectQuestionType);
   console.log(questionType, "qType");
 

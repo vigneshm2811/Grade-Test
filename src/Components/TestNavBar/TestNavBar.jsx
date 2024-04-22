@@ -78,6 +78,7 @@ const TestNavBar = () => {
       </div>
     </Box>
   </Modal>
+  
     <div className="sticky top-0  z-10">
       <nav className="bg-[#060430] border-[1px] border-gray-300 text-white shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
