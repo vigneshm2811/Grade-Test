@@ -26,24 +26,27 @@ const LatestAttemptTab = () => {
   return (
     <div>
       <div class="flex flex-col mt-8">
-        <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 ">
+        <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:px-8 ">
           <div class="inline-block min-w-full overflow-hidden align-middle border-b shadow-lg border-gray-200  sm:rounded-lg">
-            <table class="min-w-full">
+            <table class="w-full">
               <thead>
                 <tr>
-                  <th class="px-6 py-3 px-2 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                  <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                     User
                   </th>
-                  <th class="px-6 py-3 px-2 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                    Correct Answers
+                  <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                    Total questions
                   </th>
-                  <th class="px-6 py-3 px-2 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                  <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                     Attempted
                   </th>
-                  <th class="px-6 py-3 px-2 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                  <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                    Correct Answers
+                  </th>
+                  <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                     Date of Submit
                   </th>
-                  <th class="px-6 py-3 px-2 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                  <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                     Score
                   </th>
                 </tr>
@@ -53,7 +56,7 @@ const LatestAttemptTab = () => {
                 {currentTest?.map((e, i) => {
                   return (
                     <tr key={i}>
-                      <td class="py-3 px-2 whitespace-no-wrap border-b border-gray-200">
+                      <td class="py-3 px-2 whitespace-no-wrap border-b border-gray-200 ">
                         <div class="flex items-center">
                           <div class="flex-shrink-0 w-10 h-10">
                             <img
@@ -74,21 +77,24 @@ const LatestAttemptTab = () => {
                         </div>
                       </td>
 
-                      <td class="py-3 px-2 whitespace-no-wrap border-b border-gray-200">
+                      <td class="py-3 px-2 whitespace-no-wrap border-b border-gray-200 text-center">
                         <div class="text-sm leading-5 text-gray-900">
-                          {e?.correctAnswer}
+                          {e?.totalQuestions}
                         </div>
                       </td>
 
-                      <td class="py-3 px-2 whitespace-no-wrap border-b border-gray-200">
+                      <td class="py-3 px-2 whitespace-no-wrap border-b border-gray-200 text-center">
                       {e?.attemptedQuestions}
                       </td>
 
-                      <td class="py-3 px-2 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                        {e?.creationDate}
+                      <td class="py-3 px-2 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 text-center">
+                        {e?.correctAnswer}
+                      </td>
+                      <td class="py-3 px-2 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 text-center">
+                        
                       </td>
 
-                      <td class="py-3 px-2 text-sm font-medium leading-5  whitespace-no-wrap border-b border-gray-200">
+                      <td class="py-3 px-2 text-sm font-medium leading-5  whitespace-no-wrap border-b border-gray-200 text-center">
                       {e?.scoreObtained}
                       </td>
                     </tr>

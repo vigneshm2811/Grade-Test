@@ -9,13 +9,13 @@ const ResultInterface = () => {
   // const QuestionsData = useSelector((state) => state.currentQuestion);
   // const [resultData,setResultData] = useState(useSelector((state) => state.addToResult));
   const [resultData,setResultData] =useState([]);
-  const [QuestionsData,setQuestionsData] =useState( useSelector((state) => state.currentQuestion));
+  const [QuestionsData,setQuestionsData] =useState( []);
   const userId =auth.currentUser?.uid;
     useEffect(() => {
       getUserData(userId)
       getQuestionData(userId)
-      uploadResults()
       
+      uploadResults()
     }, [userId])
 
 

@@ -7,9 +7,11 @@ import userIcon from "../../assets/icons/user.png"
 import Recruiter from "../../assets/icons/office-worker.png"
 import "./LoginPageStyles.scss";
 
-import { auth, googleProvider } from "../../Firebase/Firebase"; // Ensure correct import
+import firebaseApp, { auth, googleProvider } from "../../Firebase/Firebase"; // Ensure correct import
 import RoleSelect from "./RoleSelect";
-// import { signInWithEmailAndPassword } from "firebase/auth"; // Import signInWithEmailAndPassword
+import 'firebase/auth';
+// Import signInWithEmailAndPassword
+
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -56,20 +58,20 @@ const LoginPage = () => {
       navigate("/user/home");
     } catch (error) {
       setError(error.message);
+      console.error(error)
     }
   };
 
 
-  const handleSignIn = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        console.log("details",userCredential)
-        navigate("/user/home");
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+  const handleSignIn =async  () => {
+    try {
+      await firebaseApp.auth().signInWithEmailAndPassword(email, password);
+      // Handle successful login, e.g., redirect to dashboard
+    } catch (error) {
+      console.error('Error logging in:', error);
+      setError(error.message);
+      
+    }
   };
 
   return (
@@ -181,13 +183,12 @@ const LoginPage = () => {
  {error && <p className="text-red-500">{error}</p>}
 
  <div className="mt-5">
-   <p className="text-center text-sm">
-     By Signing In, you are agreeing to our{" "}
-     <a className="text-purple-800 cursor-pointer">
-       Terms and Conditions
-     </a>{" "}
-     and{" "}
-     <a className="text-purple-800 cursor-pointer">Privacy Policy</a>{" "}
+   <p className="text-center ">
+   If you're a new user,{" "}
+     <span className="text-purple-800 cursor-pointer">
+     sign up
+     </span>{" "}  here
+
    </p>
  </div>
 </div>
@@ -195,6 +196,8 @@ const LoginPage = () => {
 
        
       </div>
+
+      
     </div>
   );
 };
