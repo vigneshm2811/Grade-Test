@@ -192,6 +192,13 @@ const TestInterface = () => {
         answer: correctAnswer,
       };
     });
+
+    const questionResultsWithTime = questionResults.map(result => ({
+      ...result,
+      timeTaken: 300 // Add time taken to each question result
+    }));
+    console.log(questionResultsWithTime,"questionResultsWithTime1")
+    console.log(questionResults,"questionResultsWithTime2")
     handleClose();
     uploadUserDataArray(questionResults);
     uploadUserCurrentQuestions(questions);

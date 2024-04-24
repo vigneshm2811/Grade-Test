@@ -10,6 +10,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState, useEffect } from "react";
 import { auth } from "../../../../Firebase/Firebase";
+import { Box, Menu, MenuItem, Modal } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 260;
 
@@ -33,25 +35,80 @@ const AppBar = styled(MuiAppBar, {
 
 const NavBar = ({ openStatus, handleOpen }) => {
   const [user, setUser] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [open, setOpen] = useState(false);
+
+const navigate = useNavigate();
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "white",
+    boxShadow: 24,
+    p: 4,
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
     });
-
     return () => unsubscribe();
   }, []);
+
+    const handleCloseUserMenu = () => {
+      auth
+        .signOut()
+        .then(() => {
+          // Logout successful
+          console.log("User logged out successfully");
+          navigate("/login");
+        })
+        .catch((error) => {
+          // An error occurred during logout
+          console.error("Error logging out:", error);
+        });
+      setAnchorElUser(null);
+    };
+
+
   console.log("user data", user);
   const theme = useTheme();
-  const [open, setOpen] = React.useState(openStatus);
 
+  const handleClose = () => setOpen(false);
   const handleDrawerOpen = () => {
     setOpen(true);
     handleOpen();
   };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
   return (
     <div>
+      <Modal
+    open={open}
+    onClose={handleClose}
+    aria-labelledby="modal-modal-title"
+    aria-describedby="modal-modal-description">
+    <Box sx={style}>
+      <p className="text-center "> Do you really want to log out?</p>
+
+      <div className="flex justify-center gap-5 mt-4">
+        <button
+          onClick={handleCloseUserMenu}
+          className="bg-blue-900 text-white w-14 py-1 rounded-md">
+          Yes
+        </button>
+        <button
+          onClick={() => handleClose()}
+          className="bg-gray-500 text-white w-14 py-1 h-9  rounded-md">
+          No
+        </button>
+      </div>
+    </Box>
+  </Modal>
       <AppBar
         position="fixed"
         open={openStatus}
@@ -73,13 +130,35 @@ const NavBar = ({ openStatus, handleOpen }) => {
             <MenuIcon />
           </IconButton>
           <div className="flex items-center gap-3">
-            <button className="flex items-center justify-center">
+            <button className="flex items-center justify-center"
+             onClick={handleOpenUserMenu}
+            >
               <img
                 src={user?.photoURL}
                 alt=""
                 className="w-10 h-10 rounded-full"
               />
             </button>
+
+            <Menu
+              sx={{ mt: "50px", p: "0px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={()=>{ setAnchorElUser(null)}}>
+              <MenuItem onClick={()=>setOpen(true)}>
+                <p className="text-center">Log Out</p>
+              </MenuItem>
+            </Menu>
             <p>{user?.displayName}</p>
           </div>
         </Toolbar>
