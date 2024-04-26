@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import {
   GithubAuthProvider,
   signInWithPopup,
@@ -232,7 +231,7 @@ const LoginForm = ({ selectedOption }) => {
               </div>
             </div>
 
-            {error && <p className="text-red-500">{error}</p>}
+            {/* {error && <p className="text-red-500">{error}</p>} */}
 
             <div className="mt-5">
               {signUp ? (

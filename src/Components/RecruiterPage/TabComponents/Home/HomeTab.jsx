@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import "./HomeTabStyles.scss";
 import { selectTest } from "../../../../helper/mainData";
 import Loader from "../../../Loader/Loader";
-import  { auth } from "../../../../Firebase/Firebase";
+import { auth } from "../../../../Firebase/Firebase";
 import firebaseApp from "../../../../Firebase/Firebase";
-import { getFirestore, collection, addDoc,getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import MailIcon from "../../../../IconsComponents/MailIcon";
+import TrashIcon from "../../../../IconsComponents/TrashIcon";
+import CustomModal from "../../../Modal/CustomModal";
 
 const HomeTab = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const currentDate = new Date();
-  const day = String(currentDate.getDate()).padStart(2, "0"); 
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); 
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
   const year = currentDate.getFullYear();
   const formattedDate = `${day}/${month}/${year}`;
   const [open, setOpen] = useState(true);
@@ -17,10 +24,14 @@ const HomeTab = () => {
 
   const [currentTest, setCurrentTest] = useState(null);
   const [buttonDisable, setButtonDisable] = useState(true);
+  const [currentTestId, setCurrentTestId] = useState(null);
 
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+  };
   const handleCardClick = (index) => {
     setActiveIndex(index);
-    setButtonDisable(false)
+    setButtonDisable(false);
   };
   useEffect(() => {
     setTimeout(() => {
@@ -29,8 +40,6 @@ const HomeTab = () => {
   });
 
   useEffect(() => {
- 
-
     fetchActiveTests();
   }, []);
 
@@ -42,52 +51,52 @@ const HomeTab = () => {
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(activeTestsData,"active")
+    console.log(activeTestsData, "active");
     setCurrentTest(activeTestsData);
   };
   const handleCreateTest = () => {
     // console.log("new",selectTest[activeIndex])
 
     // console.log("user", auth.currentUser);
-    
-      if(activeIndex !== null){
-        
-        const selectTestData = {
-          ...selectTest[activeIndex],
-          requiterId:auth?.currentUser?.uid,
-          requiterName: auth?.currentUser?.displayName,
-          email: auth?.currentUser?.email,
-          imageUrl: auth?.currentUser?.photoURL,
-          creationDate: formattedDate,
-        };
-        const array = [];
-        array.push(selectTestData);
-    
-        const db = getFirestore(firebaseApp);
-    
-        array.forEach(async (itemData) => {
-          try {
-            await addDoc(collection(db, "ActiveTests"), itemData);
-            console.log(
-              `Item with ID ${itemData.id} uploaded successfully`
-            );
-          } catch (error) {
-            console.error(
-              `Error uploading item with ID ${itemData.id}: `,
-              error
-            );
-          }
-        });
-      }
-    
 
-    
+    if (activeIndex !== null) {
+      const uniqueId = uuidv4();
+      const selectTestData = {
+        ...selectTest[activeIndex],
+        requiterId: auth?.currentUser?.uid,
+        requiterName: auth?.currentUser?.displayName,
+        email: auth?.currentUser?.email,
+        imageUrl: auth?.currentUser?.photoURL,
+        creationDate: formattedDate,
+        testId: uniqueId,
+      };
+      const array = [];
+      array.push(selectTestData);
+
+      const db = getFirestore(firebaseApp);
+
+      array.forEach(async (itemData) => {
+        try {
+          await addDoc(collection(db, "ActiveTests"), itemData);
+          console.log(`Item with ID ${itemData.id} uploaded successfully`);
+        } catch (error) {
+          console.error(`Error uploading item with ID ${itemData.id}: `, error);
+        }
+      });
+    }
+
     fetchActiveTests();
-    setButtonDisable(true)
+    setButtonDisable(true);
     setActiveIndex(null);
   };
 
-  console.log("created test", currentTest);
+  const handelInvite = (testId) => {
+    setCurrentTestId(testId);
+    toggleModal();
+  };
+
+  // console.log("Send test Id", currentTestId);
+  // console.log("created test", currentTest);
 
   return (
     <>
@@ -117,7 +126,9 @@ const HomeTab = () => {
           </div>
           <div className="flex justify-end">
             <button
-              className={`${buttonDisable?"bg-gray-300":"bg-[#1e3a8a] text-white"}  px-5 py-2 rounded-md`}
+              className={`${
+                buttonDisable ? "bg-gray-300" : "bg-[#1e3a8a] text-white"
+              }  px-5 py-2 rounded-md`}
               disabled={buttonDisable}
               onClick={handleCreateTest}>
               Create Test
@@ -125,18 +136,9 @@ const HomeTab = () => {
           </div>
 
           <div className="active-test">
-            {/* <div className="bg-white shadow-md rounded-xl">
-          <div className="flex">
-            <div>
-              <p className="text-blue-800">Quantitative Aptitude Test</p>
-            </div>
-
-          </div>
-        </div> */}
-
             <div class="flex flex-col mt-8">
               <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 ">
-                <div class="inline-block min-w-full overflow-hidden align-middle border-b shadow-lg border-gray-200 shadow sm:rounded-lg">
+                <div class="inline-block min-w-full overflow-hidden align-middle border-b shadow-lg border-gray-200  sm:rounded-lg">
                   <table class="min-w-full">
                     <thead>
                       <tr>
@@ -174,7 +176,9 @@ const HomeTab = () => {
 
                                 <div class="ml-4">
                                   <div class="text-sm font-medium leading-5 text-gray-900">
-                                    {auth?.currentUser?.uid=== e?.requiterId ? "You": e?.requiterName}
+                                    {auth?.currentUser?.uid === e?.requiterId
+                                      ? "You"
+                                      : e?.requiterName}
                                   </div>
                                   <div class="text-sm leading-5 text-gray-500">
                                     {e?.email}
@@ -200,17 +204,30 @@ const HomeTab = () => {
                             </td>
 
                             <td class="px-6 py-4 text-sm font-medium leading-5  whitespace-no-wrap border-b border-gray-200">
-                              <a
-                                href="#"
-                                class="text-indigo-600 hover:text-indigo-900">
-                                Edit
-                              </a>
+                              <div
+                                className="flex gap-2 items-center text-sm text-gray-500 cursor-pointer mb-2"
+                                onClick={() => handelInvite(e.testId)}>
+                                <MailIcon className={`text-gray-500 w-5 h-5`} />
+                                <span>Invite</span>
+                              </div>
+                              <div className="flex gap-2 items-center text-sm  text-gray-500 cursor-pointer">
+                                <TrashIcon
+                                  className={`text-gray-500 w-5 h-5 `}
+                                />
+                                <span>Remove</span>
+                              </div>
                             </td>
                           </tr>
                         );
                       })}
                     </tbody>
                   </table>
+
+                  <CustomModal
+                    openStatus={isOpen}
+                    toggleModal={toggleModal}
+                    testId={currentTestId}
+                  />
                 </div>
               </div>
             </div>

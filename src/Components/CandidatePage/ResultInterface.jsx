@@ -11,12 +11,20 @@ const ResultInterface = () => {
   const [resultData,setResultData] =useState([]);
   const [QuestionsData,setQuestionsData] =useState( []);
   const userId =auth.currentUser?.uid;
+
+  const questionType = useSelector((state) => state.selectQuestionType);
+
     useEffect(() => {
       getUserData(userId)
       getQuestionData(userId)
-      
-      uploadResults()
-    }, [userId])
+    }, [userId,questionType ])
+
+
+    useEffect(() => {
+      uploadResults()    
+     
+    }, [resultData])
+    
 
 
     
