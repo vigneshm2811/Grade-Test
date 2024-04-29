@@ -4,35 +4,44 @@ import { selectTest } from "../../../../helper/mainData";
 import Loader from "../../../Loader/Loader";
 import { auth } from "../../../../Firebase/Firebase";
 import firebaseApp from "../../../../Firebase/Firebase";
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+
 import MailIcon from "../../../../IconsComponents/MailIcon";
 import TrashIcon from "../../../../IconsComponents/TrashIcon";
 import CustomModal from "../../../Modal/CustomModal";
+import { CircularProgress } from "@mui/material";
 
 const HomeTab = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [contentLoader, setContentLoader] = useState(true);
+  const [open, setOpen] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [currentTest, setCurrentTest] = useState(null);
+  const [buttonDisable, setButtonDisable] = useState(true);
+  const [currentTestId, setCurrentTestId] = useState(null);
 
   const currentDate = new Date();
   const day = String(currentDate.getDate()).padStart(2, "0");
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
   const year = currentDate.getFullYear();
   const formattedDate = `${day}/${month}/${year}`;
-  const [open, setOpen] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(null);
-
-  const [currentTest, setCurrentTest] = useState(null);
-  const [buttonDisable, setButtonDisable] = useState(true);
-  const [currentTestId, setCurrentTestId] = useState(null);
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
+
   const handleCardClick = (index) => {
     setActiveIndex(index);
     setButtonDisable(false);
   };
+
   useEffect(() => {
     setTimeout(() => {
       setOpen(false);
@@ -44,23 +53,29 @@ const HomeTab = () => {
   }, []);
 
   const fetchActiveTests = async () => {
-    const db = getFirestore(firebaseApp);
-    const activeTestsCollection = collection(db, "ActiveTests");
-    const querySnapshot = await getDocs(activeTestsCollection);
-    const activeTestsData = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    console.log(activeTestsData, "active");
-    setCurrentTest(activeTestsData);
+    try {
+      // setContentLoader(true);
+      const db = getFirestore(firebaseApp);
+      const activeTestsCollection = collection(db, "ActiveTests");
+      const querySnapshot = await getDocs(activeTestsCollection);
+      const activeTestsData = querySnapshot.docs.map((doc) => ({
+        uniqueId: doc.id,
+        ...doc.data(),
+      }));
+      setCurrentTest(activeTestsData);
+    } catch (error) {
+      console.error("Error fetching active tests:", error);
+    } finally {
+      setTimeout(() => {
+        setContentLoader(false);
+      }, 300);
+    }
   };
+
+  console.log("Active", currentTest);
+
   const handleCreateTest = () => {
-    // console.log("new",selectTest[activeIndex])
-
-    // console.log("user", auth.currentUser);
-
     if (activeIndex !== null) {
-      const uniqueId = uuidv4();
       const selectTestData = {
         ...selectTest[activeIndex],
         requiterId: auth?.currentUser?.uid,
@@ -68,7 +83,6 @@ const HomeTab = () => {
         email: auth?.currentUser?.email,
         imageUrl: auth?.currentUser?.photoURL,
         creationDate: formattedDate,
-        testId: uniqueId,
       };
       const array = [];
       array.push(selectTestData);
@@ -95,8 +109,18 @@ const HomeTab = () => {
     toggleModal();
   };
 
-  // console.log("Send test Id", currentTestId);
-  // console.log("created test", currentTest);
+  const handleDelete = async (id) => {
+    console.log("delete id", id);
+    const db = getFirestore(firebaseApp);
+    const taskDocRef = doc(db, "ActiveTests", id);
+    try {
+      await deleteDoc(taskDocRef);
+      fetchActiveTests();
+    } catch (err) {
+      console.error("Error deleting document: ", err);
+      alert("Error deleting document");
+    }
+  };
 
   return (
     <>
@@ -104,19 +128,23 @@ const HomeTab = () => {
         <Loader />
       ) : (
         <div className="py-3 px-5">
-          <div className="select-test flex justify-center gap-10 py-5">
+          <div className="select-test flex flex-wrap justify-center gap-10 py-5">
             {selectTest?.map((test, i) => {
               return (
                 <div
-                  className={`card shadow-xl cursor-pointer bg-indigo-50 ${
+                  className={`card w-[360px] md:w-[310px] shadow-xl cursor-pointer bg-indigo-50 ${
                     activeIndex === i ? "border-blue-800 border-2" : ""
                   }`}
                   key={i}
                   onClick={() => handleCardClick(i, test)}>
-                  <div class="card-image">
-                    <img src={test.image} alt="" className=" w-full max-h-48" />
+                  <div className="card-image">
+                    <img
+                      src={test.image}
+                      alt=""
+                      className=" w-full  md:max-h-48"
+                    />
                   </div>
-                  <div class="category text-center font-xl font-semibold py-5">
+                  <div className="category text-center font-xl font-semibold py-5">
                     {" "}
                     {test?.type}{" "}
                   </div>
@@ -136,91 +164,102 @@ const HomeTab = () => {
           </div>
 
           <div className="active-test">
-            <div class="flex flex-col mt-8">
-              <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 ">
-                <div class="inline-block min-w-full overflow-hidden align-middle border-b shadow-lg border-gray-200  sm:rounded-lg">
-                  <table class="min-w-full">
+            <div className="flex flex-col mt-8">
+              <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 ">
+                <div className="inline-block min-w-full  overflow-hidden align-middle border-b shadow-lg border-gray-200 sm:rounded-lg">
+                  <table className="min-w-full">
                     <thead>
-                      <tr>
-                        <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                      <tr className="bg-gray-50">
+                        <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 ">
                           Author
                         </th>
-                        <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 ">
                           Test Name
                         </th>
-                        <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 ">
                           Status
                         </th>
-                        <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 ">
                           Created Date
                         </th>
-                        <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 ">
                           Action
                         </th>
                       </tr>
                     </thead>
 
-                    <tbody class="bg-white">
-                      {currentTest?.map((e, i) => {
-                        return (
-                          <tr key={i}>
-                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                              <div class="flex items-center">
-                                <div class="flex-shrink-0 w-10 h-10">
-                                  <img
-                                    class="w-10 h-10 rounded-full"
-                                    src={e?.imageUrl}
-                                    alt="user"
-                                  />
-                                </div>
+                    {
+                      <tbody className="bg-white">
+                        <tr className="flex  w-full justify-center">
+                          <td> {contentLoader && <CircularProgress />}</td>
+                        </tr>
+                        {!contentLoader &&
+                          currentTest?.map((e, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                  <div className="flex items-center">
+                                    <div className="flex-shrink-0 w-10 h-10">
+                                      <img
+                                        className="w-10 h-10 rounded-full"
+                                        src={e?.imageUrl}
+                                        alt="user"
+                                      />
+                                    </div>
 
-                                <div class="ml-4">
-                                  <div class="text-sm font-medium leading-5 text-gray-900">
-                                    {auth?.currentUser?.uid === e?.requiterId
-                                      ? "You"
-                                      : e?.requiterName}
+                                    <div className="ml-4">
+                                      <div className="text-sm font-medium leading-5 text-gray-900">
+                                        {auth?.currentUser?.uid ===
+                                        e?.requiterId
+                                          ? "You"
+                                          : e?.requiterName}
+                                      </div>
+                                      <div className="text-sm leading-5 text-gray-500">
+                                        {e?.email}
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div class="text-sm leading-5 text-gray-500">
-                                    {e?.email}
+                                </td>
+
+                                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                  <div className="text-sm leading-5 text-gray-900">
+                                    {e?.description}
                                   </div>
-                                </div>
-                              </div>
-                            </td>
+                                </td>
 
-                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                              <div class="text-sm leading-5 text-gray-900">
-                                {e?.description}
-                              </div>
-                            </td>
+                                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                  <span className="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
+                                    Active
+                                  </span>
+                                </td>
 
-                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                              <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
-                                Active
-                              </span>
-                            </td>
+                                <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
+                                  {e?.creationDate}
+                                </td>
 
-                            <td class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                              {e?.creationDate}
-                            </td>
-
-                            <td class="px-6 py-4 text-sm font-medium leading-5  whitespace-no-wrap border-b border-gray-200">
-                              <div
-                                className="flex gap-2 items-center text-sm text-gray-500 cursor-pointer mb-2"
-                                onClick={() => handelInvite(e.testId)}>
-                                <MailIcon className={`text-gray-500 w-5 h-5`} />
-                                <span>Invite</span>
-                              </div>
-                              <div className="flex gap-2 items-center text-sm  text-gray-500 cursor-pointer">
-                                <TrashIcon
-                                  className={`text-gray-500 w-5 h-5 `}
-                                />
-                                <span>Remove</span>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
+                                <td className="px-6 py-4 text-sm font-medium leading-5  whitespace-no-wrap border-b border-gray-200">
+                                  <div
+                                    className="flex gap-2 items-center text-sm text-gray-500 cursor-pointer mb-2"
+                                    onClick={() => handelInvite(e.uniqueId)}>
+                                    <MailIcon
+                                      className={`text-gray-500 w-5 h-5`}
+                                    />
+                                    <span>Invite</span>
+                                  </div>
+                                  <div
+                                    className="flex gap-2 items-center text-sm  text-gray-500 cursor-pointer"
+                                    onClick={() => handleDelete(e?.uniqueId)}>
+                                    <TrashIcon
+                                      className={`text-gray-500 w-5 h-5 `}
+                                    />
+                                    <span>Remove</span>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    }
                   </table>
 
                   <CustomModal

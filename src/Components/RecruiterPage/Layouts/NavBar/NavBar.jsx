@@ -38,7 +38,7 @@ const NavBar = ({ openStatus, handleOpen }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setOpen] = useState(false);
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const style = {
     position: "absolute",
     top: "50%",
@@ -57,21 +57,20 @@ const navigate = useNavigate();
     return () => unsubscribe();
   }, []);
 
-    const handleCloseUserMenu = () => {
-      auth
-        .signOut()
-        .then(() => {
-          // Logout successful
-          console.log("User logged out successfully");
-          navigate("/login");
-        })
-        .catch((error) => {
-          // An error occurred during logout
-          console.error("Error logging out:", error);
-        });
-      setAnchorElUser(null);
-    };
-
+  const handleCloseUserMenu = () => {
+    auth
+      .signOut()
+      .then(() => {
+        // Logout successful
+        console.log("User logged out successfully");
+        navigate("/login");
+      })
+      .catch((error) => {
+        // An error occurred during logout
+        console.error("Error logging out:", error);
+      });
+    setAnchorElUser(null);
+  };
 
   console.log("user data", user);
   const theme = useTheme();
@@ -88,81 +87,58 @@ const navigate = useNavigate();
   return (
     <div>
       <Modal
-    open={open}
-    onClose={handleClose}
-    aria-labelledby="modal-modal-title"
-    aria-describedby="modal-modal-description">
-    <Box sx={style}>
-      <p className="text-center "> Do you really want to log out?</p>
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <p className="text-center "> Do you really want to log out?</p>
 
-      <div className="flex justify-center gap-5 mt-4">
-        <button
-          onClick={handleCloseUserMenu}
-          className="bg-blue-900 text-white w-14 py-1 rounded-md">
-          Yes
-        </button>
-        <button
-          onClick={() => handleClose()}
-          className="bg-gray-500 text-white w-14 py-1 h-9  rounded-md">
-          No
-        </button>
-      </div>
-    </Box>
-  </Modal>
-      <AppBar
-        position="fixed"
-        open={openStatus}
-        sx={{
-          background: "white",
-          color: "black",
-        }}>
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-
-              ...(openStatus && { display: "none" }),
-            }}>
-            <MenuIcon />
-          </IconButton>
-          <div className="flex items-center gap-3">
-            <button className="flex items-center justify-center"
-             onClick={handleOpenUserMenu}
-            >
-              <img
-                src={user?.photoURL}
-                alt=""
-                className="w-10 h-10 rounded-full"
-              />
+          <div className="flex justify-center gap-5 mt-4">
+            <button
+              onClick={handleCloseUserMenu}
+              className="bg-blue-900 text-white w-14 py-1 rounded-md">
+              Yes
             </button>
-
-            <Menu
-              sx={{ mt: "50px", p: "0px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={()=>{ setAnchorElUser(null)}}>
-              <MenuItem onClick={()=>setOpen(true)}>
-                <p className="text-center">Log Out</p>
-              </MenuItem>
-            </Menu>
-            <p>{user?.displayName}</p>
+            <button
+              onClick={() => handleClose()}
+              className="bg-gray-500 text-white w-14 py-1 h-9  rounded-md">
+              No
+            </button>
           </div>
-        </Toolbar>
-      </AppBar>
+        </Box>
+      </Modal>
+
+      <div className="flex items-center gap-3">
+        <button
+          className="flex items-center justify-center"
+          onClick={handleOpenUserMenu}>
+          <img src={user?.photoURL} alt="" className="w-10 h-10 rounded-full" />
+        </button>
+
+        <Menu
+          sx={{ mt: "50px", p: "0px" }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={() => {
+            setAnchorElUser(null);
+          }}>
+          <MenuItem onClick={() => setOpen(true)}>
+            <p className="text-center">Log Out</p>
+          </MenuItem>
+        </Menu>
+        <p>{user?.displayName}</p>
+      </div>
     </div>
   );
 };

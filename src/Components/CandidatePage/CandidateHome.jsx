@@ -5,19 +5,29 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { selectQuestionType } from "../../Features/TestType/TestTypeSlice";
 import Loader from "../Loader/Loader";
+import { toast, ToastContainer } from "react-toastify";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+import firebaseApp from "../../Firebase/Firebase";
 
 const CandidateHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [testId, setTestId] = useState("");
+  const [error, setError] = useState("");
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
 
+  const notify = () => {
+    toast("Default Notification !");
+  };
+
   const handelSelect = (type) => {
     if (type === "Custom Test") {
+      // dispatch(selectQuestionType(type));
       toggleModal();
     } else {
       navigate("/user/test");
@@ -30,6 +40,34 @@ const CandidateHome = () => {
       setOpen(false);
     }, 1000);
   });
+  const fetchCustomTest = async (testId) => {
+    try {
+      // setContentLoader(true);
+      const db = getFirestore(firebaseApp);
+      const activeTestsCollection = collection(db, "ActiveTests");
+      const querySnapshot = await getDocs(activeTestsCollection);
+      const activeTestsData = querySnapshot.docs.map((doc) => ({
+        uniqueId: doc.id,
+        ...doc.data(),
+      }));
+      const customType = activeTestsData.find(
+        (data) => data.uniqueId === testId
+      );
+      dispatch(selectQuestionType(customType.type));
+      navigate("/user/test");
+    } catch (error) {
+      console.error("Error fetching active tests:", error);
+    }
+  };
+  const handelStartTest = () => {
+    if (testId === "") {
+      setError("Enter Your test ID");
+    } else {
+      // navigate("/user/test");
+      fetchCustomTest(testId);
+      // dispatch(selectQuestionType(testId));
+    }
+  };
 
   return (
     <>
@@ -88,15 +126,18 @@ const CandidateHome = () => {
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 Please check your Email
               </h3>
-
+              <span>{error}</span>
               <input
                 className="w-full my-5 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                 type="text"
-                autoComplete="username"
+                autoComplete="test"
                 placeholder="Enter Your Test ID"
+                value={testId}
+                onChange={(e) => setTestId(e.target.value)}
               />
+
               <button
-                onClick={toggleModal}
+                onClick={handelStartTest}
                 type="button"
                 className=" bg-indigo-800 hover:bg-indigo-700 text-gray-100 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                 Start Test
@@ -109,6 +150,7 @@ const CandidateHome = () => {
               </button>
             </div>
           </div>
+          {/* <ToastContainer position="top-right" autoClose={5000} theme="dark" /> */}
         </div>
       )}
     </>
