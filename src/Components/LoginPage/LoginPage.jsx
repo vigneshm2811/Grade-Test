@@ -13,8 +13,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-full h-screen  md:flex bg-black py-10 md:p-0 ">
-      <div className=" md:w-1/2 w-full md:flex justify-center items-center">
+    <div className="w-full h-screen  md:flex md:bg-black bg-[#030212] py-10 md:p-0 ">
+      <div className="hidden md:w-1/2 w-full md:flex justify-center items-center">
         <img src={MainLogo} alt="logo" className="mx-auto w-3/4 md:w-auto" />
       </div>
 
