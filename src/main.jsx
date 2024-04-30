@@ -18,11 +18,10 @@ import ResultInterface from "./Components/CandidatePage/ResultInterface.jsx";
 import CandidatePageLayout from "./Components/CandidatePageLayout/CandidatePageLayout.jsx";
 import store from "./app/store";
 
-
 const AppRouter = (
   <Router>
     <Routes path="/" element={<Layout />}>
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/recruiter" element={<LayoutRecruiterPage />}>
         <Route path="" element={<HomeTab />} />

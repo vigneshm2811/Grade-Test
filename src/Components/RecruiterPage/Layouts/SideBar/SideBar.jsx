@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
-
 import MuiDrawer from "@mui/material/Drawer";
-
 import List from "@mui/material/List";
-
 import Divider from "@mui/material/Divider";
-
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+
 import logo from "../../../../assets/GradeTestLogo.png";
 
 import { SideBarData } from "../../../../helper/mainData";
@@ -70,7 +65,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function SideBar() {
   const theme = useTheme();
-  const [open, setOpen] = useState(true);
+
   const [active, setActive] = useState(0);
 
   const navigate = useNavigate();
@@ -83,7 +78,6 @@ export default function SideBar() {
   return (
     <Drawer
       variant="permanent"
-      open={open}
       sx={{
         width: drawerWidth,
         flexShrink: 0,

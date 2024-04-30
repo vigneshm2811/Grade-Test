@@ -110,6 +110,7 @@ const NavBar = ({ openStatus, handleOpen }) => {
       </Modal>
 
       <div className="flex items-center gap-3">
+        <p className="text-black">{user?.displayName}</p>
         <button
           className="flex items-center justify-center"
           onClick={handleOpenUserMenu}>
@@ -137,7 +138,6 @@ const NavBar = ({ openStatus, handleOpen }) => {
             <p className="text-center">Log Out</p>
           </MenuItem>
         </Menu>
-        <p>{user?.displayName}</p>
       </div>
     </div>
   );
