@@ -61,18 +61,14 @@ const NavBar = ({ openStatus, handleOpen }) => {
     auth
       .signOut()
       .then(() => {
-        // Logout successful
-        console.log("User logged out successfully");
         navigate("/login");
       })
       .catch((error) => {
-        // An error occurred during logout
         console.error("Error logging out:", error);
       });
     setAnchorElUser(null);
   };
 
-  console.log("user data", user);
   const theme = useTheme();
 
   const handleClose = () => setOpen(false);

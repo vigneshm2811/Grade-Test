@@ -8,14 +8,14 @@ import Loader from "../Loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import firebaseApp from "../../Firebase/Firebase";
-
+import "react-toastify/dist/ReactToastify.css";
+import { Helmet } from "react-helmet";
 const CandidateHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [testId, setTestId] = useState("");
-  const [error, setError] = useState("");
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -27,7 +27,6 @@ const CandidateHome = () => {
 
   const handelSelect = (type) => {
     if (type === "Custom Test") {
-      // dispatch(selectQuestionType(type));
       toggleModal();
     } else {
       navigate("/user/test");
@@ -42,7 +41,6 @@ const CandidateHome = () => {
   });
   const fetchCustomTest = async (testId) => {
     try {
-      // setContentLoader(true);
       const db = getFirestore(firebaseApp);
       const activeTestsCollection = collection(db, "ActiveTests");
       const querySnapshot = await getDocs(activeTestsCollection);
@@ -57,20 +55,22 @@ const CandidateHome = () => {
       navigate("/user/test");
     } catch (error) {
       console.error("Error fetching active tests:", error);
+      toast.error("In Valid Test ID");
     }
   };
   const handelStartTest = () => {
     if (testId === "") {
-      setError("Enter Your test ID");
+      toast.error("Enter Your test ID");
     } else {
-      // navigate("/user/test");
       fetchCustomTest(testId);
-      // dispatch(selectQuestionType(testId));
     }
   };
 
   return (
     <>
+      <Helmet>
+        <title>Test Type</title>
+      </Helmet>
       {open ? (
         <Loader />
       ) : (
@@ -126,7 +126,7 @@ const CandidateHome = () => {
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 Please check your Email
               </h3>
-              <span>{error}</span>
+
               <input
                 className="w-full my-5 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                 type="text"
@@ -150,7 +150,7 @@ const CandidateHome = () => {
               </button>
             </div>
           </div>
-          {/* <ToastContainer position="top-right" autoClose={5000} theme="dark" /> */}
+          <ToastContainer position="top-right" autoClose={5000} theme="dark" />
         </div>
       )}
     </>

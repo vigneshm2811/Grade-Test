@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -12,8 +12,7 @@ import logo from "../../../../assets/GradeTestLogo.png";
 
 import { SideBarData } from "../../../../helper/mainData";
 import { SvgIcon } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const drawerWidth = 260;
 
 const openedMixin = (theme) => ({
@@ -64,14 +63,22 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function SideBar() {
+  const location = useLocation();
   const theme = useTheme();
 
   const [active, setActive] = useState(0);
 
+  useEffect(() => {
+    const storedIndex = sessionStorage.getItem("activeIndex");
+    if (storedIndex !== null) {
+      setActive(parseInt(storedIndex));
+    }
+  }, []);
   const navigate = useNavigate();
 
   const handelActive = (index, path) => {
     setActive(index);
+    sessionStorage.setItem("activeIndex", index);
     navigate(path);
   };
 
@@ -94,13 +101,6 @@ export default function SideBar() {
           justifyContent: "center",
           alignItems: "center",
         }}>
-        {/* <IconButton onClick={handleDrawerClose}>
-          {theme.direction === "rtl" ? (
-            <ChevronRightIcon />
-          ) : (
-            <ChevronLeftIcon />
-          )}
-        </IconButton> */}
         <img src={logo} alt="logo" className="w-40" />
       </DrawerHeader>
       <Divider />
@@ -112,7 +112,7 @@ export default function SideBar() {
               disablePadding
               sx={{ display: "block" }}
               onClick={() => handelActive(index, e?.path)}>
-              <Link>
+              <Link to>
                 <ListItemButton
                   sx={{
                     minHeight: 48,

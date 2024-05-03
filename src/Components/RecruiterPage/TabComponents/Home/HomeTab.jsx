@@ -72,8 +72,6 @@ const HomeTab = () => {
     }
   };
 
-  console.log("Active", currentTest);
-
   const handleCreateTest = () => {
     if (activeIndex !== null) {
       const selectTestData = {
@@ -92,7 +90,7 @@ const HomeTab = () => {
       array.forEach(async (itemData) => {
         try {
           await addDoc(collection(db, "ActiveTests"), itemData);
-          console.log(`Item with ID ${itemData.id} uploaded successfully`);
+          // console.log(`Item with ID ${itemData.id} uploaded successfully`);
         } catch (error) {
           console.error(`Error uploading item with ID ${itemData.id}: `, error);
         }
@@ -110,7 +108,6 @@ const HomeTab = () => {
   };
 
   const handleDelete = async (id) => {
-    console.log("delete id", id);
     const db = getFirestore(firebaseApp);
     const taskDocRef = doc(db, "ActiveTests", id);
     try {

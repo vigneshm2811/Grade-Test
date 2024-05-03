@@ -17,7 +17,6 @@ export const resultSlice = createSlice({
     },
     uploadUserDataSuccess: (state) => {
       state.loading = false;
-      console.log("Data uploaded successfully!");
     },
     uploadUserDataFailure: (state, action) => {
       state.loading = false;

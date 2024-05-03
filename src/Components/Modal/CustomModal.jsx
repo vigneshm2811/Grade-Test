@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { send } from "@emailjs/browser";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Modal = ({ toggleModal, openStatus, testId }) => {
   const [recipientEmail, setRecipientEmail] = useState("");
@@ -24,11 +26,10 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
         "ii8IcL_3yPyinvgmN"
       );
 
-      console.log("Email sent successfully!", response);
       toggleModals();
       setRecipientEmail("");
     } catch (error) {
-      setError("Enter Valid Email");
+      toast.error("Enter Valid Email", {});
       console.error("Error sending email:", error);
       setRecipientEmail("");
     }
@@ -75,6 +76,7 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
               </button>
             </div>
           </div>
+          <ToastContainer />
         </div>
       )}
     </>

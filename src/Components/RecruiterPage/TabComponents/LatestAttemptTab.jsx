@@ -6,8 +6,6 @@ const LatestAttemptTab = () => {
   const [currentTest, setCurrentTest] = useState([]);
 
   useEffect(() => {
- 
-
     fetchActiveTests();
   }, []);
 
@@ -19,7 +17,7 @@ const LatestAttemptTab = () => {
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(activeTestsData,"active")
+
     setCurrentTest(activeTestsData);
   };
 
@@ -84,18 +82,16 @@ const LatestAttemptTab = () => {
                       </td>
 
                       <td class="py-3 px-2 whitespace-no-wrap border-b border-gray-200 text-center">
-                      {e?.attemptedQuestions}
+                        {e?.attemptedQuestions}
                       </td>
 
                       <td class="py-3 px-2 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 text-center">
                         {e?.correctAnswer}
                       </td>
-                      <td class="py-3 px-2 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 text-center">
-                        
-                      </td>
+                      <td class="py-3 px-2 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 text-center"></td>
 
                       <td class="py-3 px-2 text-sm font-medium leading-5  whitespace-no-wrap border-b border-gray-200 text-center">
-                      {e?.scoreObtained}
+                        {e?.scoreObtained}
                       </td>
                     </tr>
                   );
@@ -103,6 +99,9 @@ const LatestAttemptTab = () => {
               </tbody>
             </table>
           </div>
+          {/* <button class="px-8 z-30 py-4 bg-rose-400 rounded-md text-white relative font-semibold font-sans after:-z-20 after:absolute after:h-1 after:w-1 after:bg-rose-800 after:left-[45%] overflow-hidden after:top-[50%] after:translate-y-full after:rounded-md after:hover:scale-[300] after:hover:transition-all after:hover:duration-700 after:transition-all after:duration-700 transition-all duration-700 text-2xl">
+            Hover Me
+          </button> */}
         </div>
       </div>
     </div>

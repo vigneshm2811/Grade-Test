@@ -13,17 +13,17 @@ import { useNavigate } from "react-router-dom";
 import firebaseApp, { auth, firestore } from "../../Firebase/Firebase";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
-import Upload from "../Upload";
+
 import Box from "@mui/material/Box";
 
 import Modal from "@mui/material/Modal";
+import { Helmet } from "react-helmet";
 
 const TestInterface = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const timeSec = 300;
   const questionType = useSelector((state) => state.selectQuestionType);
-  console.log(questionType, "qType");
 
   const [questions, setQuestions] = useState([]);
   const [open, setOpen] = useState(false);
@@ -32,6 +32,7 @@ const TestInterface = () => {
   const [answeredCount, setAnsweredCount] = useState(0);
   const [unansweredCount, setUnansweredCount] = useState(0);
   const [markedForReview, setMarkedForReview] = useState([]);
+  const [title, setTitle] = useState("Test");
 
   const style = {
     position: "absolute",
@@ -48,7 +49,6 @@ const TestInterface = () => {
   useEffect(() => {
     setQuestionsType(questionType);
   }, [questionType]);
-  console.log(questionsType, "qType after");
 
   useEffect(() => {
     fetchData();
@@ -56,8 +56,7 @@ const TestInterface = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      console.log("submitted.............");
-      setOpen(true)
+      setOpen(true);
     }, timeSec * 1000);
   }, []);
 
@@ -75,21 +74,25 @@ const TestInterface = () => {
           setQuestions(
             questionsData.filter((question) => question.type === "numeric")
           );
+          setTitle("Numeric Test");
           break;
         case "English Skills":
           setQuestions(
             questionsData.filter((question) => question.type === "verbal")
           );
+          setTitle("Verbal Test");
           break;
         case "Programming":
           setQuestions(
             questionsData.filter((question) => question.type === "computer")
           );
+          setTitle("Programming Test");
           break;
         case "Custom Test":
           setQuestions(
             questionsData.filter((question) => question.type === "computer")
           );
+          setTitle("Custom Test");
           break;
         default:
           setQuestions(questionsData);
@@ -120,7 +123,7 @@ const TestInterface = () => {
         const usersCollection = collection(firestore, "users");
         const usersSnapshot = await getDocs(usersCollection);
         const userData = usersSnapshot.docs.map((doc) => doc.data());
-        console.log("userDataF", userData);
+        // console.log("userDataF", userData);
         return userData;
       } else {
         throw new Error("User not found");
@@ -147,7 +150,6 @@ const TestInterface = () => {
       const userRef = doc(firestore, "users", userId);
       // Upload the sanitized data to Firestore, including the user ID
       await setDoc(userRef, { userId, ...sanitizedUserData });
-      console.log("Data uploaded successfully!");
     } catch (error) {
       console.error("Error uploading data:", error);
     }
@@ -166,13 +168,12 @@ const TestInterface = () => {
       const userRef = doc(firestore, "CurrentQuestions", userId);
       // Upload the sanitized data to Firestore, including the user ID
       await setDoc(userRef, { userId, ...sanitizedUserData });
-      console.log("Data uploaded successfully!");
     } catch (error) {
       console.error("Error uploading data:", error);
     }
   };
 
-  console.log("user id", auth.currentUser?.uid);
+  // console.log("user id", auth.currentUser?.uid);
 
   const handleSubmit = () => {
     const questionResults = questions.map((data, i) => {
@@ -193,18 +194,17 @@ const TestInterface = () => {
       };
     });
 
-    const questionResultsWithTime = questionResults.map(result => ({
+    const questionResultsWithTime = questionResults.map((result) => ({
       ...result,
-      timeTaken: 300 // Add time taken to each question result
+      timeTaken: 300, // Add time taken to each question result
     }));
-    console.log(questionResultsWithTime,"questionResultsWithTime1")
-    console.log(questionResults,"questionResultsWithTime2")
+    // console.log(questionResultsWithTime,"questionResultsWithTime1")
+    // console.log(questionResults,"questionResultsWithTime2")
     handleClose();
     uploadUserDataArray(questionResults);
     uploadUserCurrentQuestions(questions);
     const userId = auth.currentUser?.uid;
     getUserData(userId);
-    // dispatch(addToResult(questionResults));
     dispatch(currentQuestions(questions));
 
     navigate("/user/result");
@@ -224,6 +224,9 @@ const TestInterface = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <Modal
         open={open}
         onClose={handleClose}
@@ -234,7 +237,7 @@ const TestInterface = () => {
 
           <div className="flex justify-center gap-5 mt-4">
             <button
-              onClick={ handleSubmit}
+              onClick={handleSubmit}
               className="bg-blue-900 text-white w-14 py-1 rounded-md">
               Yes
             </button>

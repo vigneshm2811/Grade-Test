@@ -8,11 +8,12 @@ import {
 import "firebase/auth";
 import "./LoginPageStyles.scss";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "firebase/auth";
 import { CircularProgress } from "@mui/material";
 import { auth, googleProvider } from "../../Firebase/Firebase";
-
+import { Helmet } from "react-helmet";
 const LoginForm = ({ selectedOption }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -35,12 +36,11 @@ const LoginForm = ({ selectedOption }) => {
       }
 
       const user = res.user;
-      console.log(user);
+
       navigate("/recruiter");
 
       setIsPending(false);
     } catch (error) {
-      console.log(error);
       setError(error.message);
       setIsPending(false);
     }
@@ -51,7 +51,7 @@ const LoginForm = ({ selectedOption }) => {
       const result = await signInWithPopup(auth, googleProvider);
       navigate("/user/home");
     } catch (error) {
-      setError(error.message);
+      toast.error("Invalid credential");
 
       console.error(error);
     }
@@ -65,7 +65,7 @@ const LoginForm = ({ selectedOption }) => {
         // Signed in
         const user = userCredential.user;
         navigate("/user/home");
-        console.log(user);
+        // console.log(user);
       })
       .catch((error) => {
         console.error(error.message);
@@ -80,7 +80,6 @@ const LoginForm = ({ selectedOption }) => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
 
         setSignUp(false);
       })
@@ -97,6 +96,9 @@ const LoginForm = ({ selectedOption }) => {
   };
   return (
     <>
+      <Helmet>
+        <title>GradeTest-Login</title>
+      </Helmet>
       <div className="lg:w-1/2 w-4/5  md:min-h-[517px] shadow-lg flex flex-col items-center justify-center bg-white p-4  md:py-7 md:px-7 lg:px-12">
         {isPending ? (
           <CircularProgress />

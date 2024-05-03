@@ -1,148 +1,120 @@
 import React, { useEffect, useState } from "react";
-import { verbalQuestionsData, ResultDataCards } from "../../helper/mainData";
+import { ResultDataCards } from "../../helper/mainData";
 import { useSelector } from "react-redux";
 import firebaseApp, { auth, firestore } from "../../Firebase/Firebase";
-import { getFirestore, collection, getDocs, setDoc, doc } from "firebase/firestore";
-
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+} from "firebase/firestore";
+import { Helmet } from "react-helmet";
 
 const ResultInterface = () => {
-  // const QuestionsData = useSelector((state) => state.currentQuestion);
-  // const [resultData,setResultData] = useState(useSelector((state) => state.addToResult));
-  const [resultData,setResultData] =useState([]);
-  const [QuestionsData,setQuestionsData] =useState( []);
-  const userId =auth.currentUser?.uid;
+  const [resultData, setResultData] = useState([]);
+  const [QuestionsData, setQuestionsData] = useState([]);
+  const userId = auth.currentUser?.uid;
 
   const questionType = useSelector((state) => state.selectQuestionType);
 
-    useEffect(() => {
-      getUserData(userId)
-      getQuestionData(userId)
-    }, [userId,questionType ])
+  useEffect(() => {
+    getUserData(userId);
+    getQuestionData(userId);
+  }, [userId, questionType]);
 
+  useEffect(() => {
+    uploadResults();
+  }, [resultData]);
 
-    useEffect(() => {
-      uploadResults()    
-     
-    }, [resultData])
-    
-
-
-    
-    
-    const getUserData = async (userId) => {
-      try {
-        if (userId === auth.currentUser?.uid) {
-          const firestore = getFirestore(firebaseApp);
-          const usersCollection = collection(firestore, "users");
-          const usersSnapshot = await getDocs(usersCollection);
-          const userData = usersSnapshot.docs.map((doc) => doc.data());
-          console.log("userDataF", userData[0]);
-          const data = userData[0]
-          const parsedData =  Object.keys(data).map(key => data[key]);
-          
-          
-          // return userData;
-          console.log("userDataParsed",parsedData)
-          setResultData(parsedData?.filter((data) => data.id))
-        }
-        else{
-          throw new Error("User not found");
-        }
-      } catch (error) {
-        console.error("Error getting user data:", error);
-        return null;
+  const getUserData = async (userId) => {
+    try {
+      if (userId === auth.currentUser?.uid) {
+        const firestore = getFirestore(firebaseApp);
+        const usersCollection = collection(firestore, "users");
+        const usersSnapshot = await getDocs(usersCollection);
+        const userData = usersSnapshot.docs.map((doc) => doc.data());
+        // console.log("userDataF", userData[0]);
+        const data = userData[0];
+        const parsedData = Object.keys(data).map((key) => data[key]);
+        // console.log("userDataParsed",parsedData)
+        setResultData(parsedData?.filter((data) => data.id));
+      } else {
+        throw new Error("User not found");
       }
-    };
+    } catch (error) {
+      console.error("Error getting user data:", error);
+      return null;
+    }
+  };
 
+  const getQuestionData = async (userId) => {
+    try {
+      if (userId === auth.currentUser?.uid) {
+        const firestore = getFirestore(firebaseApp);
+        const usersCollection = collection(firestore, "CurrentQuestions");
+        const usersSnapshot = await getDocs(usersCollection);
+        const userData = usersSnapshot.docs.map((doc) => doc.data());
 
-    const getQuestionData = async (userId) => {
-      try {
-        if (userId === auth.currentUser?.uid) {
-          const firestore = getFirestore(firebaseApp);
-          const usersCollection = collection(firestore, "CurrentQuestions");
-          const usersSnapshot = await getDocs(usersCollection);
-          const userData = usersSnapshot.docs.map((doc) => doc.data());
-          console.log("userDataF", userData[0]);
-          const data = userData[0]
-          const parsedData =  Object.keys(data).map(key => data[key]);
-          
-          
-          // return userData;
-          console.log("questionDataParsed",parsedData)
-          setQuestionsData(parsedData?.filter((data) => data.id))
-        }
-        else{
-          throw new Error("User not found");
-        }
-      } catch (error) {
-        console.error("Error getting user data:", error);
-        return null;
+        const data = userData[0];
+        const parsedData = Object.keys(data).map((key) => data[key]);
+        setQuestionsData(parsedData?.filter((data) => data.id));
+      } else {
+        throw new Error("User not found");
       }
-    };
-  
-  console.log("new",resultData)
-
-  // console.log(
-  //   "total",
-  //   QuestionsData[0].reduce((total, result) => total + result.points, 0)
-  // );
-  // console.log("totals", QuestionsData[0]);
-
-  // console.log("QuestionsData", QuestionsData);
+    } catch (error) {
+      console.error("Error getting user data:", error);
+      return null;
+    }
+  };
 
   const overAllTotal = QuestionsData?.reduce(
     (total, result) => total + result?.points,
     0
   );
-  const score =resultData?.reduce(
-    (total, result) => total + result?.score,
-    0
-  );
+  const score = resultData?.reduce((total, result) => total + result?.score, 0);
 
   const attemptedQuestions = resultData?.reduce((count, e) => {
     return e?.attempted ? count + 1 : count;
-  }, 0)
+  }, 0);
 
-  const correctAnswer =resultData?.reduce((count, e) => {
+  const correctAnswer = resultData?.reduce((count, e) => {
     return e?.isCorrect ? count + 1 : count;
   }, 0);
-  console.log("score",score)
 
-  const uploadResults = async()=>{
-    const userResultData =[]
-    const resultData ={
-      userId:auth.currentUser?.uid,
+  const uploadResults = async () => {
+    const userResultData = [];
+    const resultData = {
+      userId: auth.currentUser?.uid,
       userImage: auth.currentUser?.photoURL,
-      userName:auth.currentUser?.displayName,
-      userEmail:auth.currentUser?.email,
-      scoreObtained:score,
-      TotalScore:overAllTotal,
-      totalQuestions:QuestionsData?.length,
-      attemptedQuestions :attemptedQuestions,
-      correctAnswer :correctAnswer,
-    }
+      userName: auth.currentUser?.displayName,
+      userEmail: auth.currentUser?.email,
+      scoreObtained: score,
+      TotalScore: overAllTotal,
+      totalQuestions: QuestionsData?.length,
+      attemptedQuestions: attemptedQuestions,
+      correctAnswer: correctAnswer,
+    };
     userResultData.push(resultData);
 
     const db = getFirestore(firebaseApp);
-    
+
     const userId = auth?.currentUser?.uid;
     try {
-    
-   
       const userRef = doc(firestore, "userResults", userId);
 
       await setDoc(userRef, { userId, ...resultData });
-      console.log("Data uploaded successfully!");
+      // console.log("Data uploaded successfully!");
     } catch (error) {
       console.error("Error uploading data:", error);
     }
-  }
-    
-  
-
+  };
 
   return (
     <>
+      <Helmet>
+        <title>Result</title>
+      </Helmet>
       <div className="md:px-24 px-8  py-10 ">
         <div className="flex  justify-center relative">
           <div className="lg:w-[60%] w-full">
@@ -154,11 +126,11 @@ const ResultInterface = () => {
                   case "noOfQuestion":
                     value = QuestionsData?.length;
                     break;
-                    case "questionsAttempt":
-                      value = resultData?.reduce((count, e) => {
-                        return e?.attempted ? count + 1 : count;
-                      }, 0);
-                      console.log("attempted",value);
+                  case "questionsAttempt":
+                    value = resultData?.reduce((count, e) => {
+                      return e?.attempted ? count + 1 : count;
+                    }, 0);
+
                     break;
                   case "correctlyAnswered":
                     value = resultData?.reduce((count, e) => {
@@ -193,7 +165,7 @@ const ResultInterface = () => {
             <div>
               {QuestionsData?.map((data, index) => {
                 const matchData = resultData?.find((e) => e.id === data.id);
-                console.log("match data", matchData);
+
                 return (
                   <div
                     className="rounded-md shadow-md px-7 py-3 border-[1px] mb-5"
