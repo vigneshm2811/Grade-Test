@@ -17,6 +17,7 @@ import MailIcon from "../../../../IconsComponents/MailIcon";
 import TrashIcon from "../../../../IconsComponents/TrashIcon";
 import CustomModal from "../../../Modal/CustomModal";
 import { CircularProgress } from "@mui/material";
+import CustomTestCard from "../../../CustomTestCard/CustomTestCard";
 
 const HomeTab = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +39,7 @@ const HomeTab = () => {
   };
 
   const handleCardClick = (index) => {
+    console.log("clicked");
     setActiveIndex(index);
     setButtonDisable(false);
   };
@@ -125,30 +127,41 @@ const HomeTab = () => {
         <Loader />
       ) : (
         <div className="py-3 px-5">
-          <div className="select-test flex flex-wrap justify-center gap-10 py-5">
+          <div className="select-test flex flex-wrap justify-evenly gap-10 py-5">
             {selectTest?.map((test, i) => {
               return (
-                <div
-                  className={`card w-[360px] md:w-[310px] shadow-xl cursor-pointer bg-indigo-50 ${
-                    activeIndex === i ? "border-blue-800 border-2" : ""
-                  }`}
+                // <div
+                //   className={`card w-[360px] md:w-[310px] shadow-xl cursor-pointer bg-indigo-50 ${
+                //     activeIndex === i ? "border-blue-800 border-2" : ""
+                //   }`}
+                //   key={i}
+                //   onClick={() => handleCardClick(i, test)}>
+                //   <div className="card-image">
+                //     <img
+                //       src={test.image}
+                //       alt=""
+                //       className=" w-full  md:max-h-48"
+                //     />
+                //   </div>
+                //   <div className="category text-center font-xl font-semibold py-5">
+                //     {" "}
+                //     {test?.type}{" "}
+                //   </div>
+                // </div>
+                <CustomTestCard
                   key={i}
-                  onClick={() => handleCardClick(i, test)}>
-                  <div className="card-image">
-                    <img
-                      src={test.image}
-                      alt=""
-                      className=" w-full  md:max-h-48"
-                    />
-                  </div>
-                  <div className="category text-center font-xl font-semibold py-5">
-                    {" "}
-                    {test?.type}{" "}
-                  </div>
-                </div>
+                  CustomClass={
+                    activeIndex === i ? "border-blue-800 border-2" : ""
+                  }
+                  handleCardClick={() => handleCardClick(i, test)}
+                  image={test?.image}
+                  title={test?.type}
+                  description={test?.description}
+                />
               );
             })}
           </div>
+
           <div className="flex justify-end">
             <button
               className={`${

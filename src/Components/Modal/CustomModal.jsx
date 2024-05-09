@@ -14,8 +14,8 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
   const sendEmail = async () => {
     try {
       const response = await send(
-        "service_6273cuo",
-        "template_p5wgmos",
+        import.meta.env.VITE_EMAIL_SERVICE_ID,
+        import.meta.env.VITE_EMAIL_TEMPLATE_ID,
         {
           to_email: recipientEmail,
           subject: "Invitation to Take a Test with Grade Test",
@@ -23,7 +23,7 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
           testId: testId,
           testLink: "https://grade-test.vercel.app/",
         },
-        "ii8IcL_3yPyinvgmN"
+        import.meta.env.VITE_EMAIL_API_AUTH_KEY
       );
 
       toggleModals();

@@ -4,10 +4,10 @@ import App from "./App.jsx";
 import "./index.css";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Import BrowserRouter and Route
-import HomePage from "./Components/HomePage/HomePage.jsx";
+import HomePage from "./pages/HomePage/HomePage.jsx";
 import Layout from "./Layout.jsx";
 import LoginPage from "./Components/LoginPage/LoginPage.jsx";
-import LayoutRecruiterPage from "./Components/RecruiterPage/Layouts/Index.jsx";
+import LayoutRecruiterPage from "./pages/RecruiterPage/Layouts/Index.jsx";
 import HomeTab from "./Components/RecruiterPage/TabComponents/Home/HomeTab.jsx";
 import CustomTestTab from "./Components/RecruiterPage/TabComponents/CustomTestTab.jsx";
 import ProfileTab from "./Components/RecruiterPage/TabComponents/ProfileTab.jsx";
@@ -15,7 +15,7 @@ import LatestAttemptTab from "./Components/RecruiterPage/TabComponents/LatestAtt
 import CandidateHome from "./Components/CandidatePage/CandidateHome.jsx";
 import TestInterface from "./Components/CandidatePage/TestInterface.jsx";
 import ResultInterface from "./Components/CandidatePage/ResultInterface.jsx";
-import CandidatePageLayout from "./Components/CandidatePageLayout/CandidatePageLayout.jsx";
+import CandidatePageLayout from "./pages/CandidatePageLayout/CandidatePageLayout.jsx";
 import store from "./app/store";
 
 const AppRouter = (

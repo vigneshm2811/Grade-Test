@@ -113,6 +113,7 @@ const CandidateHome = () => {
               })}
             </div>
           </div>
+          
         </div>
       )}
 

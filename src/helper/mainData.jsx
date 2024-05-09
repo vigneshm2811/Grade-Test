@@ -16,6 +16,7 @@ import Developer from "../assets/TestTypeImages/developer.png";
 import Mathematics from "../assets/TestTypeImages/maths.png";
 import English2 from "../assets/TestTypeImages/English.png";
 import CustomTest from "../assets/TestTypeImages/CustomTest.png";
+import Networks from "../assets/TestTypeImages/Networks.jpg";
 
 export const LoginFormData = [
   {
@@ -112,29 +113,31 @@ export const selectTest = [
   {
     id: 1,
     type: "Quantitative",
-    description:
-      "Quantitative Aptitude Test",
+    description: "Quantitative Aptitude Test",
     image: Mathematics,
   },
   {
     id: 2,
     type: "Programming",
-    description:
-      "Programming Basic MCQ",
+    description: "Programming Basic MCQ",
     image: Developer,
   },
   {
     id: 3,
     type: "English Skills",
-    description:
-      "Verbal Ability Test",
+    description: "Verbal Ability Test",
     image: English2,
   },
   {
     id: 4,
+    type: "Networks and Security",
+    description: "Computer Networks Test",
+    image: Networks,
+  },
+  {
+    id: 5,
     type: "Custom Test",
-    description:
-      "Test for knowledge of specific skills using Equip's content or your own.",
+    description: "Customize your test as you need",
     image: CustomTest,
   },
 ];

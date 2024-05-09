@@ -1,25 +1,25 @@
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "firebase/app";
-    import { getAuth, GoogleAuthProvider } from "firebase/auth";
-    import { getFirestore } from "firebase/firestore"; 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBeuTTSZMaJS2at4W67-24ScRjoESTZnwc",
-        authDomain: "grade-test-419211.firebaseapp.com",
-        projectId: "grade-test-419211",
-        storageBucket: "grade-test-419211.appspot.com",
-        messagingSenderId: "111056746863",
-        appId: "1:111056746863:web:eb398032aef5cb1730909a",
-        measurementId: "G-HK2V8WC53G"
-    };
+const firebaseConfig = {
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_MSG_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID,
+    measurementId: import.meta.env.VITE_MEASURE_ID
+};
 
-    const firebaseApp = initializeApp(firebaseConfig);
-    const auth = getAuth(firebaseApp);
-    const firestore = getFirestore(firebaseApp); 
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
 
-    const googleProvider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
-    export { auth, googleProvider,firestore };
-    export default firebaseApp;
+export { auth, googleProvider, firestore };
+export default firebaseApp;

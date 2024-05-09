@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import TestNavBar from "../TestNavBar/TestNavBar";
+import TestNavBar from "../../Components/TestNavBar/TestNavBar";
 
 const CandidatePageLayout = () => {
   return (
