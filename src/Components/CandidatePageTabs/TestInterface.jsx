@@ -41,7 +41,6 @@ const TestInterface = () => {
     transform: "translate(-50%, -50%)",
     width: 400,
     bgcolor: "white",
-
     boxShadow: 24,
     p: 4,
   };
@@ -95,7 +94,9 @@ const TestInterface = () => {
           setTitle("Custom Test");
           break;
         default:
-          setQuestions(questionsData);
+          setQuestions(
+            questionsData.filter((question) => question.type === questionsType)
+          );
       }
 
       setSelectedOptions(Array(questionsData.length).fill(-1));

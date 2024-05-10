@@ -17,6 +17,7 @@ import Mathematics from "../assets/TestTypeImages/maths.png";
 import English2 from "../assets/TestTypeImages/English.png";
 import CustomTest from "../assets/TestTypeImages/CustomTest.png";
 import Networks from "../assets/TestTypeImages/Networks.jpg";
+import DSA from "../assets/TestTypeImages/DSA.jpg";
 
 export const LoginFormData = [
   {
@@ -51,12 +52,6 @@ export const SideBarData = [
     label: "Latest Attempts",
     icon: AssessmentOutlinedIcon,
     path: "attempts",
-  },
-  {
-    id: 4,
-    label: "Profile",
-    icon: PersonOutlineOutlinedIcon,
-    path: "profile",
   },
 ];
 
@@ -112,31 +107,43 @@ export const TestTypeData = [
 export const selectTest = [
   {
     id: 1,
-    type: "Quantitative",
+    type: "numeric",
+    title: "Quantitative",
     description: "Quantitative Aptitude Test",
     image: Mathematics,
   },
   {
     id: 2,
-    type: "Programming",
+    type: "computer",
+    title: "Programming",
     description: "Programming Basic MCQ",
     image: Developer,
   },
   {
     id: 3,
-    type: "English Skills",
+    type: "verbal",
+    title: "English Skills",
     description: "Verbal Ability Test",
     image: English2,
   },
   {
     id: 4,
-    type: "Networks and Security",
+    type: "Computer Networks",
+    title: "Networks and Security",
     description: "Computer Networks Test",
     image: Networks,
   },
   {
+    id: 4,
+    type: "DSA",
+    title: "DSA",
+    description: "Data structure and Algorithm",
+    image: DSA,
+  },
+  {
     id: 5,
     type: "Custom Test",
+    title: "Custom Test",
     description: "Customize your test as you need",
     image: CustomTest,
   },
@@ -967,5 +974,426 @@ export const programmingQuestions = [
     answer: "To enforce referential integrity between two tables",
     points: 2,
     type: "computer",
+  },
+];
+
+export const dsaQuestions = [
+  {
+    id: 1,
+    question:
+      "What is the time complexity of inserting an element at the end of an array?",
+    options: ["O(1)", "O(log n)", "O(n)", "O(n^2)"],
+    answer: "O(1)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 2,
+    question:
+      "Which data structure is typically used for implementing LIFO (Last In First Out) behavior?",
+    options: ["Queue", "Heap", "Stack", "Tree"],
+    answer: "Stack",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 3,
+    question:
+      "What is the time complexity of searching for an element in a binary search tree (BST)?",
+    options: ["O(1)", "O(log n)", "O(n)", "O(n^2)"],
+    answer: "O(log n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 4,
+    question:
+      "Which sorting algorithm has the worst-case time complexity of O(n^2)?",
+    options: ["Merge Sort", "Quick Sort", "Bubble Sort", "Insertion Sort"],
+    answer: "Bubble Sort",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 5,
+    question:
+      "What data structure is typically used for implementing breadth-first search (BFS)?",
+    options: ["Queue", "Stack", "Heap", "Linked List"],
+    answer: "Queue",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 6,
+    question: "What is the worst-case time complexity of quicksort algorithm?",
+    options: ["O(n)", "O(n log n)", "O(n^2)", "O(log n)"],
+    answer: "O(n^2)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 7,
+    question: "Which data structure is used for implementing priority queues?",
+    options: ["Queue", "Stack", "Heap", "Linked List"],
+    answer: "Heap",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 8,
+    question: "What is the time complexity of binary search in a sorted array?",
+    options: ["O(n)", "O(log n)", "O(n^2)", "O(1)"],
+    answer: "O(log n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 9,
+    question: "What is the space complexity of merge sort algorithm?",
+    options: ["O(n)", "O(n log n)", "O(n^2)", "O(log n)"],
+    answer: "O(n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 10,
+    question: "What is the purpose of a hash function in hashing?",
+    options: [
+      "To increase space complexity",
+      "To decrease time complexity",
+      "To map data to a fixed-size array",
+      "To sort data efficiently",
+    ],
+    answer: "To map data to a fixed-size array",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 11,
+    question: "Which data structure uses LIFO (Last In First Out) ordering?",
+    options: ["Queue", "Stack", "Heap", "Linked List"],
+    answer: "Stack",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 12,
+    question: "What is the time complexity of linear search?",
+    options: ["O(n)", "O(log n)", "O(n^2)", "O(1)"],
+    answer: "O(n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 13,
+    question:
+      "What is the time complexity of inserting an element in the middle of an array?",
+    options: ["O(1)", "O(log n)", "O(n)", "O(n^2)"],
+    answer: "O(n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 14,
+    question: "What is the space complexity of a binary search tree?",
+    options: ["O(n)", "O(log n)", "O(n^2)", "O(1)"],
+    answer: "O(n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 15,
+    question: "Which data structure is used in depth-first search (DFS)?",
+    options: ["Queue", "Stack", "Heap", "Linked List"],
+    answer: "Stack",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 16,
+    question:
+      "What is the time complexity of heapify operation in a binary heap?",
+    options: ["O(n)", "O(log n)", "O(n^2)", "O(1)"],
+    answer: "O(log n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 17,
+    question: "What is the space complexity of quicksort algorithm?",
+    options: ["O(n)", "O(n log n)", "O(n^2)", "O(log n)"],
+    answer: "O(log n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 18,
+    question:
+      "Which of the following is an application of a stack data structure?",
+    options: [
+      "Undo functionality in text editors",
+      "Routing in a network",
+      "Implementing breadth-first search",
+      "Representing a hierarchical relationship",
+    ],
+    answer: "Undo functionality in text editors",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 19,
+    question:
+      "What is the time complexity of a binary search tree (BST) traversal?",
+    options: ["O(n)", "O(log n)", "O(n^2)", "O(1)"],
+    answer: "O(n)",
+    points: 2,
+    type: "DSA",
+  },
+  {
+    id: 20,
+    question:
+      "What is the time complexity of deleting an element from the front of a queue?",
+    options: ["O(1)", "O(log n)", "O(n)", "O(n^2)"],
+    answer: "O(1)",
+    points: 2,
+    type: "DSA",
+  },
+];
+
+export const computerNetworksQuestions = [
+  {
+    id: 1,
+    question:
+      "Which of the following layers of the OSI model is responsible for routing and addressing?",
+    options: [
+      "Physical Layer",
+      "Data Link Layer",
+      "Network Layer",
+      "Transport Layer",
+    ],
+    answer: "Network Layer",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 2,
+    question:
+      "What is the function of ARP (Address Resolution Protocol) in computer networks?",
+    options: [
+      "To convert IP addresses to MAC addresses",
+      "To convert domain names to IP addresses",
+      "To establish a secure connection between client and server",
+      "To route packets across networks",
+    ],
+    answer: "To convert IP addresses to MAC addresses",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 3,
+    question:
+      "Which protocol is used for secure communication over a computer network?",
+    options: ["HTTP", "FTP", "TCP", "SSL/TLS"],
+    answer: "SSL/TLS",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 4,
+    question:
+      "What is the purpose of DHCP (Dynamic Host Configuration Protocol) in computer networks?",
+    options: [
+      "To convert IP addresses to MAC addresses",
+      "To assign IP addresses dynamically to network devices",
+      "To convert domain names to IP addresses",
+      "To establish a secure connection between client and server",
+    ],
+    answer: "To assign IP addresses dynamically to network devices",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 5,
+    question:
+      "Which protocol is used for transferring files over the internet?",
+    options: ["FTP", "HTTP", "SMTP", "SSH"],
+    answer: "FTP",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 6,
+    question: "What is the primary function of a router in a computer network?",
+    options: [
+      "To connect devices within the same network",
+      "To connect multiple networks together",
+      "To ensure secure communication between client and server",
+      "To store and manage data packets",
+    ],
+    answer: "To connect multiple networks together",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 7,
+    question:
+      "Which protocol is used for sending and receiving email messages?",
+    options: ["HTTP", "FTP", "SMTP", "POP3"],
+    answer: "SMTP",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 8,
+    question:
+      "What is the purpose of NAT (Network Address Translation) in computer networks?",
+    options: [
+      "To convert IP addresses to MAC addresses",
+      "To assign IP addresses dynamically to network devices",
+      "To translate private IP addresses to public IP addresses",
+      "To ensure secure communication between client and server",
+    ],
+    answer: "To translate private IP addresses to public IP addresses",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 9,
+    question:
+      "Which protocol is used for resolving domain names to IP addresses?",
+    options: ["FTP", "HTTP", "DNS", "SMTP"],
+    answer: "DNS",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 10,
+    question:
+      "What is the purpose of ICMP (Internet Control Message Protocol) in computer networks?",
+    options: [
+      "To transfer files between client and server",
+      "To manage network traffic",
+      "To diagnose network connectivity issues",
+      "To secure communication between client and server",
+    ],
+    answer: "To diagnose network connectivity issues",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 11,
+    question:
+      "Which layer of the OSI model is responsible for error detection and correction?",
+    options: [
+      "Physical Layer",
+      "Data Link Layer",
+      "Network Layer",
+      "Transport Layer",
+    ],
+    answer: "Data Link Layer",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 12,
+    question: "What is the function of a firewall in a computer network?",
+    options: [
+      "To connect devices within the same network",
+      "To connect multiple networks together",
+      "To filter and monitor incoming and outgoing network traffic",
+      "To store and manage data packets",
+    ],
+    answer: "To filter and monitor incoming and outgoing network traffic",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 13,
+    question:
+      "Which protocol is used for secure shell access to a remote server?",
+    options: ["FTP", "HTTP", "SSH", "SMTP"],
+    answer: "SSH",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 14,
+    question: "What is the purpose of a proxy server in a computer network?",
+    options: [
+      "To connect devices within the same network",
+      "To connect multiple networks together",
+      "To forward requests from clients to servers and vice versa",
+      "To store and manage data packets",
+    ],
+    answer: "To forward requests from clients to servers and vice versa",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 15,
+    question:
+      "Which protocol is used for transferring hypertext documents over the internet?",
+    options: ["FTP", "HTTP", "SMTP", "SSH"],
+    answer: "HTTP",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 16,
+    question:
+      "What is the purpose of VLANs (Virtual Local Area Networks) in computer networks?",
+    options: [
+      "To connect devices within the same network",
+      "To connect multiple networks together",
+      "To isolate network traffic within a specific group of devices",
+      "To ensure secure communication between client and server",
+    ],
+    answer: "To isolate network traffic within a specific group of devices",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 17,
+    question:
+      "Which protocol is used for transferring emails from a mail server to a client?",
+    options: ["HTTP", "FTP", "SMTP", "POP3"],
+    answer: "POP3",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 18,
+    question: "What is the function of a switch in a computer network?",
+    options: [
+      "To connect devices within the same network",
+      "To connect multiple networks together",
+      "To forward data packets between devices within the same network",
+      "To store and manage data packets",
+    ],
+    answer: "To forward data packets between devices within the same network",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 19,
+    question:
+      "Which protocol is used for transferring files securely over a network?",
+    options: ["FTP", "HTTP", "SMTP", "SFTP"],
+    answer: "SFTP",
+    points: 2,
+    type: "Computer Networks",
+  },
+  {
+    id: 20,
+    question: "What is the purpose of subnetting in computer networks?",
+    options: [
+      "To divide a large network into smaller subnetworks",
+      "To establish secure connections between client and server",
+      "To manage network traffic",
+      "To translate private IP addresses to public IP addresses",
+    ],
+    answer: "To divide a large network into smaller subnetworks",
+    points: 2,
+    type: "Computer Networks",
   },
 ];
