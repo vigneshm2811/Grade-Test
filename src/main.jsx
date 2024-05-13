@@ -17,11 +17,14 @@ import TestInterface from "./Components/CandidatePageTabs/TestInterface.jsx";
 import ResultInterface from "./Components/CandidatePageTabs/ResultInterface.jsx";
 import CandidatePageLayout from "./pages/CandidatePageLayout/CandidatePageLayout.jsx";
 import store from "./app/store";
+import NotFound from "./pages/NotFound/NotFound.jsx";
 
 const AppRouter = (
   <Router>
     <Routes path="/" element={<Layout />}>
+      <Route path="*" element={<NotFound />} />
       <Route path="/" element={<LoginPage />} />
+
       <Route path="/login" element={<LoginPage />} />
       <Route path="/recruiter" element={<LayoutRecruiterPage />}>
         <Route path="" element={<HomeTab />} />
