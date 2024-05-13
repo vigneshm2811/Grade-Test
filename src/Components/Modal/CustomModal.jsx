@@ -29,7 +29,9 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
       toggleModals();
       setRecipientEmail("");
     } catch (error) {
-      toast.error("Enter Valid Email", {});
+      toast.error("Enter Valid Email", {
+        theme: "dark",
+      });
       console.error("Error sending email:", error);
       setRecipientEmail("");
     }

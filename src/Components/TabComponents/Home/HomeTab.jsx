@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./HomeTabStyles.scss";
-import { selectTest } from "../../../../helper/mainData";
-import Loader from "../../../Loader/Loader";
-import { auth } from "../../../../Firebase/Firebase";
-import firebaseApp from "../../../../Firebase/Firebase";
+import { selectTest } from "../../../helper/mainData";
+import Loader from "../../Loader/Loader";
+import { auth } from "../../../Firebase/Firebase";
+import firebaseApp from "../../../Firebase/Firebase";
 import {
   getFirestore,
   collection,
@@ -13,11 +13,11 @@ import {
   doc,
 } from "firebase/firestore";
 
-import MailIcon from "../../../../IconsComponents/MailIcon";
-import TrashIcon from "../../../../IconsComponents/TrashIcon";
-import CustomModal from "../../../Modal/CustomModal";
+import MailIcon from "../../../IconsComponents/MailIcon";
+import TrashIcon from "../../../IconsComponents/TrashIcon";
+import CustomModal from "../../Modal/CustomModal";
 import { CircularProgress } from "@mui/material";
-import CustomTestCard from "../../../CustomTestCard/CustomTestCard";
+import CustomTestCard from "../../CustomTestCard/CustomTestCard";
 
 const HomeTab = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +39,6 @@ const HomeTab = () => {
   };
 
   const handleCardClick = (index) => {
-    console.log("clicked");
     setActiveIndex(index);
     setButtonDisable(false);
   };
@@ -127,7 +126,7 @@ const HomeTab = () => {
         <Loader />
       ) : (
         <div className="py-3 px-5">
-          <div className="select-test flex flex-wrap justify-evenly gap-10 py-5">
+          <div className="select-test flex flex-wrap justify-between gap-10 py-5">
             {selectTest?.map((test, i) => {
               return (
                 // <div
@@ -155,7 +154,7 @@ const HomeTab = () => {
                   }
                   handleCardClick={() => handleCardClick(i, test)}
                   image={test?.image}
-                  title={test?.type}
+                  title={test?.title}
                   description={test?.description}
                 />
               );

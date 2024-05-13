@@ -6,15 +6,15 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Import BrowserRouter and Route
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import Layout from "./Layout.jsx";
-import LoginPage from "./Components/LoginPage/LoginPage.jsx";
+import LoginPage from "./pages/LoginPage/LoginPage.jsx";
 import LayoutRecruiterPage from "./pages/RecruiterPage/Layouts/Index.jsx";
-import HomeTab from "./Components/RecruiterPage/TabComponents/Home/HomeTab.jsx";
-import CustomTestTab from "./Components/RecruiterPage/TabComponents/CustomTestTab.jsx";
-import ProfileTab from "./Components/RecruiterPage/TabComponents/ProfileTab.jsx";
-import LatestAttemptTab from "./Components/RecruiterPage/TabComponents/LatestAttemptTab.jsx";
-import CandidateHome from "./Components/CandidatePage/CandidateHome.jsx";
-import TestInterface from "./Components/CandidatePage/TestInterface.jsx";
-import ResultInterface from "./Components/CandidatePage/ResultInterface.jsx";
+import HomeTab from "./Components/TabComponents/Home/HomeTab.jsx";
+import CustomTestTab from "./Components/TabComponents/CustomTestTab.jsx";
+
+import LatestAttemptTab from "./Components/TabComponents/LatestAttemptTab.jsx";
+import CandidateHome from "./Components/CandidatePageTabs/CandidateHome.jsx";
+import TestInterface from "./Components/CandidatePageTabs/TestInterface.jsx";
+import ResultInterface from "./Components/CandidatePageTabs/ResultInterface.jsx";
 import CandidatePageLayout from "./pages/CandidatePageLayout/CandidatePageLayout.jsx";
 import store from "./app/store";
 
@@ -26,7 +26,6 @@ const AppRouter = (
       <Route path="/recruiter" element={<LayoutRecruiterPage />}>
         <Route path="" element={<HomeTab />} />
         <Route path="custom-test" element={<CustomTestTab />} />
-        <Route path="profile" element={<ProfileTab />} />
         <Route path="attempts" element={<LatestAttemptTab />} />
       </Route>
       <Route path="/user" element={<CandidatePageLayout />}>

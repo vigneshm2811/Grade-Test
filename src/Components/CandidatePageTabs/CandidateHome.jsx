@@ -10,6 +10,7 @@ import { collection, getDocs, getFirestore } from "firebase/firestore";
 import firebaseApp from "../../Firebase/Firebase";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet";
+import Upload from "../UploadData/UploadData";
 const CandidateHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -113,7 +114,6 @@ const CandidateHome = () => {
               })}
             </div>
           </div>
-          
         </div>
       )}
 

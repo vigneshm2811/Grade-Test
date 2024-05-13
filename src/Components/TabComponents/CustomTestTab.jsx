@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import MoreIcon from "../../../IconsComponents/MoreIcon";
+import MoreIcon from "../../IconsComponents/MoreIcon";
 import "./TabsCommonStyles.scss";
-import CloudSave from "../../../IconsComponents/CloudSave";
-import FolderPlus from "../../../IconsComponents/FolderPlus";
+import CloudSave from "../../IconsComponents/CloudSave";
+import FolderPlus from "../../IconsComponents/FolderPlus";
 
 const CustomTestTab = () => {
   const [options, setOptions] = useState([""]);

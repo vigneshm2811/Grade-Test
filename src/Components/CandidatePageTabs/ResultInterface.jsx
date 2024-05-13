@@ -83,6 +83,7 @@ const ResultInterface = () => {
   }, 0);
 
   const uploadResults = async () => {
+    const dateOfSubmit = new Date();
     const userResultData = [];
     const resultData = {
       userId: auth.currentUser?.uid,
@@ -94,6 +95,7 @@ const ResultInterface = () => {
       totalQuestions: QuestionsData?.length,
       attemptedQuestions: attemptedQuestions,
       correctAnswer: correctAnswer,
+      dateOfSubmit: dateOfSubmit,
     };
     userResultData.push(resultData);
 

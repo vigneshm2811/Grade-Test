@@ -51,8 +51,6 @@ const LoginForm = ({ selectedOption }) => {
       const result = await signInWithPopup(auth, googleProvider);
       navigate("/user/home");
     } catch (error) {
-      toast.error("Invalid credential");
-
       console.error(error);
     }
   };
@@ -68,9 +66,10 @@ const LoginForm = ({ selectedOption }) => {
         // console.log(user);
       })
       .catch((error) => {
-        console.error(error.message);
-        setError("User Not Found");
+        toast.error("Invalid credential");
       });
+    setEmail("");
+    setPassword("");
   };
 
   const handelSignUp = async (e) => {
@@ -84,6 +83,7 @@ const LoginForm = ({ selectedOption }) => {
         setSignUp(false);
       })
       .catch((error) => {
+        setUsername("");
         setError(error.message);
       });
   };
@@ -269,6 +269,7 @@ const LoginForm = ({ selectedOption }) => {
           </div>
         )}
       </div>
+      <ToastContainer theme="dark" autoClose={3000} />
     </>
   );
 };
