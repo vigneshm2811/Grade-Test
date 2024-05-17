@@ -21,12 +21,13 @@ const ResultInterface = () => {
   useEffect(() => {
     getUserData(userId);
     getQuestionData(userId);
-  }, [userId, questionType]);
+  }, [userId]);
 
   useEffect(() => {
     uploadResults();
   }, [resultData]);
 
+  // get user data and upload the result of user to firebase db
   const getUserData = async (userId) => {
     try {
       if (userId === auth.currentUser?.uid) {
@@ -34,10 +35,10 @@ const ResultInterface = () => {
         const usersCollection = collection(firestore, "users");
         const usersSnapshot = await getDocs(usersCollection);
         const userData = usersSnapshot.docs.map((doc) => doc.data());
-        // console.log("userDataF", userData[0]);
+        console.log("userDataF", userData[0]);
         const data = userData[0];
         const parsedData = Object.keys(data).map((key) => data[key]);
-        // console.log("userDataParsed",parsedData)
+        console.log("userDataParsed", parsedData);
         setResultData(parsedData?.filter((data) => data.id));
       } else {
         throw new Error("User not found");
@@ -49,24 +50,15 @@ const ResultInterface = () => {
   };
 
   const getQuestionData = async (userId) => {
-    try {
-      if (userId === auth.currentUser?.uid) {
-        const firestore = getFirestore(firebaseApp);
-        const usersCollection = collection(firestore, "CurrentQuestions");
-        const usersSnapshot = await getDocs(usersCollection);
-        const userData = usersSnapshot.docs.map((doc) => doc.data());
-
-        const data = userData[0];
-        const parsedData = Object.keys(data).map((key) => data[key]);
-        setQuestionsData(parsedData?.filter((data) => data.id));
-      } else {
-        throw new Error("User not found");
-      }
-    } catch (error) {
-      console.error("Error getting user data:", error);
-      return null;
+    const savedState = sessionStorage.getItem("testState");
+    if (savedState) {
+      const data = JSON.parse(savedState);
+      console.log("current questions", data);
+      setQuestionsData(data);
     }
+    return null;
   };
+  console.log(QuestionsData, "upadteddd");
 
   const overAllTotal = QuestionsData?.reduce(
     (total, result) => total + result?.points,

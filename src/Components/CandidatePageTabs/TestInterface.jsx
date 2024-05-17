@@ -51,6 +51,8 @@ const TestInterface = () => {
 
   useEffect(() => {
     fetchData();
+    console.log("length", questions.length);
+    setUnansweredCount(questions.length);
   }, [questionsType]);
 
   useEffect(() => {
@@ -100,11 +102,13 @@ const TestInterface = () => {
       }
 
       setSelectedOptions(Array(questionsData.length).fill(-1));
-      setUnansweredCount(questions.length);
       setMarkedForReview(Array(questionsData.length).fill(false));
     } catch (error) {
       console.log(error);
     }
+  };
+  const saveCurrentQuestionData = (questions) => {
+    sessionStorage.setItem("testState", JSON.stringify(questions));
   };
 
   const handleOptionSelect = (questionIndex, optionIndex) => {
@@ -156,26 +160,6 @@ const TestInterface = () => {
     }
   };
 
-  const uploadUserCurrentQuestions = async (CurrentQuestion) => {
-    const userId = auth.currentUser.uid;
-    try {
-      // Remove fields with undefined values
-      const sanitizedUserData = Object.fromEntries(
-        Object.entries(CurrentQuestion).filter(
-          ([_, value]) => value !== undefined
-        )
-      );
-      // Get a reference to the user's document in Firestore
-      const userRef = doc(firestore, "CurrentQuestions", userId);
-      // Upload the sanitized data to Firestore, including the user ID
-      await setDoc(userRef, { userId, ...sanitizedUserData });
-    } catch (error) {
-      console.error("Error uploading data:", error);
-    }
-  };
-
-  // console.log("user id", auth.currentUser?.uid);
-
   const handleSubmit = () => {
     const questionResults = questions.map((data, i) => {
       const selectedOptionIndex = selectedOptions[i];
@@ -203,7 +187,8 @@ const TestInterface = () => {
     // console.log(questionResults,"questionResultsWithTime2")
     handleClose();
     uploadUserDataArray(questionResults);
-    uploadUserCurrentQuestions(questions);
+
+    saveCurrentQuestionData(questions);
     const userId = auth.currentUser?.uid;
     getUserData(userId);
     dispatch(currentQuestions(questions));

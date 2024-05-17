@@ -126,27 +126,9 @@ const HomeTab = () => {
         <Loader />
       ) : (
         <div className="py-3 px-5">
-          <div className="select-test flex flex-wrap justify-between gap-10 py-5">
+          <div className="select-test flex justify-center flex-wrap lg:justify-between gap-10 py-5">
             {selectTest?.map((test, i) => {
               return (
-                // <div
-                //   className={`card w-[360px] md:w-[310px] shadow-xl cursor-pointer bg-indigo-50 ${
-                //     activeIndex === i ? "border-blue-800 border-2" : ""
-                //   }`}
-                //   key={i}
-                //   onClick={() => handleCardClick(i, test)}>
-                //   <div className="card-image">
-                //     <img
-                //       src={test.image}
-                //       alt=""
-                //       className=" w-full  md:max-h-48"
-                //     />
-                //   </div>
-                //   <div className="category text-center font-xl font-semibold py-5">
-                //     {" "}
-                //     {test?.type}{" "}
-                //   </div>
-                // </div>
                 <CustomTestCard
                   key={i}
                   CustomClass={
