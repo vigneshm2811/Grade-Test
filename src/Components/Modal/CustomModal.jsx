@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { send } from "@emailjs/browser";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from "react-hot-toast";
 
 const Modal = ({ toggleModal, openStatus, testId }) => {
   const [recipientEmail, setRecipientEmail] = useState("");
@@ -78,7 +77,14 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
               </button>
             </div>
           </div>
-          <ToastContainer />
+          <Toaster
+            toastOptions={{
+              className: "",
+              style: {
+                zIndex: "999",
+              },
+            }}
+          />
         </div>
       )}
     </>

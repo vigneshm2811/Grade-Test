@@ -1,4 +1,5 @@
 import logo from "../../assets/Logo/GradeTestLogo.png";
+import userAvatar from "../../assets/icons/user-avatar.png";
 import { TestNavBarData } from "../../helper/mainData";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ import Modal from "@mui/material/Modal";
 
 const TestNavBar = () => {
   const navigate = useNavigate();
+  const [imageError, setImageError] = useState(false);
   const [user, setUser] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setOpen] = useState(false);
@@ -101,12 +103,14 @@ const TestNavBar = () => {
                   <p className="text-center">Log Out</p>
                 </MenuItem>
               </Menu>
-              <img
-                className="w-10 h-10 rounded-full"
-                src={user?.photoURL}
-                alt="user photo"
-                onClick={handleOpenUserMenu}
-              />
+              <div className="w-10 h-10 rounded-full">
+                <img
+                  className=""
+                  src={imageError ? user?.photoURL : userAvatar}
+                  alt="user"
+                  onClick={handleOpenUserMenu}
+                />
+              </div>
             </div>
             <div
               className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"

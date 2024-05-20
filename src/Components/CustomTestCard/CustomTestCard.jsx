@@ -1,4 +1,5 @@
 import React from "react";
+import "animate.css";
 
 const CustomTestCard = ({
   image,
@@ -10,7 +11,7 @@ const CustomTestCard = ({
   return (
     <>
       <div
-        className={`${CustomClass} flex lg:w-[430px] w-[85%] cursor-pointer  items-center  rounded-lg shadow bg-gray-100 `}
+        className={`${CustomClass} flex 2xl:w-[430px] xl:w-[380px] w-[85%] cursor-pointer  items-center  rounded-lg shadow bg-gray-100 `}
         onClick={handleCardClick}>
         <img
           className="object-cover rounded-t-lg w-36 h-28 md:rounded-none md:rounded-s-lg"
