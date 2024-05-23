@@ -12,7 +12,7 @@
 - Email System: EmailJS
 
 ### Installation
-    Follow these steps to set up the Grade Test application on your local machine.
+ Follow these steps to set up the Grade Test application on your local machine.
 
 #### Prerequisites
 Make sure you have the following software installed:
