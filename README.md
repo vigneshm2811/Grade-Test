@@ -2,11 +2,13 @@
 Grade Test is an innovative platform designed to streamline the process of conducting aptitude tests for interviews. This application allows recruiters to easily schedule, create, and manage tests for candidates, providing a seamless and efficient experience for both recruiters and candidates.
 
 #Features
+
 Test Creation and Management: Design customized tests tailored to specific roles and requirements.
 Scheduling: Schedule tests and notify candidates automatically via email.
 Candidate Management: Track candidate performance and manage their progress through a centralized dashboard.
 
 #Technology Stack
+
 Frontend: React with Vite
 Backend: Firebase (Firestore and Authentication)
 Email System: EmailJS
