@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { send } from "@emailjs/browser";
+import { EmailSender } from "../../helper/mailer";
 import toast, { Toaster } from "react-hot-toast";
 
 const Modal = ({ toggleModal, openStatus, testId }) => {
@@ -12,19 +12,7 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
 
   const sendEmail = async () => {
     try {
-      const response = await send(
-        import.meta.env.VITE_EMAIL_SERVICE_ID,
-        import.meta.env.VITE_EMAIL_TEMPLATE_ID,
-        {
-          to_email: recipientEmail,
-          subject: "Invitation to Take a Test with Grade Test",
-          to_name: "",
-          testId: testId,
-          testLink: "https://grade-test.vercel.app/",
-        },
-        import.meta.env.VITE_EMAIL_API_AUTH_KEY
-      );
-
+      EmailSender(recipientEmail, testId);
       toggleModals();
       setRecipientEmail("");
     } catch (error) {
@@ -34,10 +22,6 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
       console.error("Error sending email:", error);
       setRecipientEmail("");
     }
-  };
-
-  const handleEmailChange = (e) => {
-    setRecipientEmail(e.target.value);
   };
 
   return (
@@ -61,7 +45,7 @@ const Modal = ({ toggleModal, openStatus, testId }) => {
                 autoComplete="username"
                 placeholder="Enter Email ID"
                 value={recipientEmail}
-                onChange={handleEmailChange}
+                onChange={(e) => setRecipientEmail(e.target.value)}
               />
               <button
                 onClick={sendEmail}
