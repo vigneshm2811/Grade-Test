@@ -3,14 +3,14 @@ import { TestTypeData } from "../../helper/mainData";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { selectQuestionType } from "../../Features/TestType/TestTypeSlice";
+import { selectQuestionType } from "../../reduxSlice/TestType/TestTypeSlice";
 import Loader from "../Loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import firebaseApp from "../../Firebase/Firebase";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet";
-import Upload from "../UploadData/UploadData";
+
 const CandidateHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

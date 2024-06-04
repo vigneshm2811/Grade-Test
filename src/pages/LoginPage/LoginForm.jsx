@@ -235,8 +235,6 @@ const LoginForm = ({ selectedOption }) => {
               </div>
             </div>
 
-            {/* {error && <p className="text-red-500">{error}</p>} */}
-
             <div className="mt-5">
               {signUp ? (
                 <p className="text-center ">
