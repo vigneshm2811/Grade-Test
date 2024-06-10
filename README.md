@@ -1,12 +1,40 @@
-# Grade Test
+# Grade Test: The Ultimate Interview Aptitude Test Platform
 
-Grade Test is an innovative platform designed to streamline the process of conducting aptitude tests for interviews. This application allows recruiters to easily schedule, create, and manage tests for candidates, providing a seamless and efficient experience for both recruiters and candidates.
+## Project Overview
+Grade Test is a cutting-edge application designed to streamline the process of conducting aptitude tests for interviews. This platform is a boon for recruiters and hiring managers, offering an efficient way to schedule, create, and manage tests for candidates. Built with the latest web technologies, Grade Test ensures a seamless and intuitive user experience.
 
-#### Features
+### Key Features
+- **Test Creation and Management**: Easily design customized tests tailored to the specific needs of your organization or the role you are hiring for.
+- **Scheduling**: Effortlessly schedule tests and notify candidates with automated emails, ensuring smooth coordination and communication.
+- **Candidate Management**: Keep track of candidate performance and progress through a centralized dashboard, making the evaluation process more organized and effective.
+- **User-Friendly Interface**: Navigate the platform effortlessly with an intuitive user interface. Both recruiters and candidates can easily access and complete tests, enhancing the overall experience.
+- **Scalability**: Whether you're a small startup or a large enterprise, Grade Test scales to meet your requirements. Handle high volumes of candidates without compromising on performance.
 
-- Test Creation and Management: Design customized tests tailored to specific roles and requirements.
-- Scheduling: Schedule tests and notify candidates automatically via email.
-- Candidate Management: Track candidate performance and manage their progress through a centralized dashboard.
+## Author(s) and Maintainers
+- **Author**: vignesh M
+- **Contact Information**: vignesh.mohan@colanonline.com
+- **Role**: Developer
+
+### Contributions
+If you are interested in contributing to this project, please reach out via email. Contributions are welcome, and guidelines for contributing can be found in the `CONTRIBUTING.md` file in the repository.
+
+## License
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgements
+We would like to thank all the contributors and the open-source community for their invaluable support. Special thanks to the developers of the libraries and tools that made this project possible.
+
+---
+
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Author(s) and Maintainers](#authors-and-maintainers)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+
 
 #### Technology Stack
 
