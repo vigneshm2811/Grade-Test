@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, memo } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -7,12 +7,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-
 import logo from "../../../../assets/GradeTestLogo.png";
-
 import { SideBarData } from "../../../../helper/mainData";
 import { SvgIcon } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
 const drawerWidth = 260;
 
 const openedMixin = (theme) => ({
@@ -41,7 +40,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -62,11 +60,11 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function SideBar() {
+const SideBar = memo(() => {
   const location = useLocation();
   const theme = useTheme();
-
   const [active, setActive] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedIndex = sessionStorage.getItem("activeIndex");
@@ -74,13 +72,15 @@ export default function SideBar() {
       setActive(parseInt(storedIndex));
     }
   }, []);
-  const navigate = useNavigate();
 
-  const handelActive = (index, path) => {
-    setActive(index);
-    sessionStorage.setItem("activeIndex", index);
-    navigate(path);
-  };
+  const handelActive = useCallback(
+    (index, path) => {
+      setActive(index);
+      sessionStorage.setItem("activeIndex", index);
+      navigate(path);
+    },
+    [navigate]
+  );
 
   return (
     <Drawer
@@ -105,47 +105,46 @@ export default function SideBar() {
       </DrawerHeader>
       <Divider />
       <List>
-        {SideBarData?.map((e, index) => {
-          return (
-            <ListItem
-              key={e?.id}
-              disablePadding
-              sx={{ display: "block" }}
-              onClick={() => handelActive(index, e?.path)}>
-              <Link to>
-                <ListItemButton
+        {SideBarData?.map((e, index) => (
+          <ListItem
+            key={e?.id}
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handelActive(index, e?.path)}>
+            <Link to={e?.path} style={{ textDecoration: "none" }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: "initial",
+                  px: 2.5,
+                  backgroundColor: active === index ? "#1c036f" : "",
+                  "&:hover": {
+                    backgroundColor: "#13014fa3",
+                  },
+                }}>
+                <ListItemIcon
                   sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                    backgroundColor: active === index ? "#1c036f" : "",
-                    "&:hover": {
-                      backgroundColor: "#13014fa3",
-                    },
+                    minWidth: 0,
+                    mr: 3,
+                    justifyContent: "center",
                   }}>
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}>
-                    <SvgIcon
-                      component={e?.icon}
-                      inheritViewBox
-                      sx={{ fontSize: "28px", color: "white" }}
-                    />
-                  </ListItemIcon>
-
-                  <ListItemText
-                    primary={e?.label}
-                    sx={{ opacity: open ? 1 : 0 }}
+                  <SvgIcon
+                    component={e?.icon}
+                    inheritViewBox
+                    sx={{ fontSize: "28px", color: "white" }}
                   />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-          );
-        })}
+                </ListItemIcon>
+                <ListItemText
+                  primary={e?.label}
+                  sx={{ opacity: 1, color: "white" }}
+                />
+              </ListItemButton>
+            </Link>
+          </ListItem>
+        ))}
       </List>
     </Drawer>
   );
-}
+});
+
+export default SideBar;

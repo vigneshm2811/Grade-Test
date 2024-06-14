@@ -8,11 +8,9 @@ const Loader = () => {
           color: "#ddd",
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
-        open={open}
-      >
-
-      <CircularProgress color="inherit" />
-  </Backdrop>
+        open={open}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };

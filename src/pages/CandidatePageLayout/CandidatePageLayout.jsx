@@ -7,7 +7,6 @@ const CandidatePageLayout = () => {
     <>
       <div className="h-screen overflow-y-scroll relative ">
         <TestNavBar />
-      
         <Outlet />
       </div>
     </>
