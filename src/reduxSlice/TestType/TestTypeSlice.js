@@ -13,12 +13,10 @@ export const TestType = createSlice({
     reducers: {
         selectQuestionType: (state, action) => {
             // Save the selected question type to cookies with an expiration time
-            Cookies.set("selectedQuestionType", action.payload, { expires: 7 }); // Expires in 7 days
+            Cookies.set("selectedQuestionType", action.payload, { expires: 5 / 1440 }); // Expires in 5 minutes
             return action.payload;
         },
     }
 })
-
 export const { selectQuestionType } = TestType.actions
-
 export default TestType.reducer
