@@ -50,9 +50,11 @@ const TestInterface = () => {
 
   useEffect(() => {
     fetchData();
-    console.log("length", questions.length);
-    setUnansweredCount(questions.length);
   }, [questionsType]);
+
+  useEffect(() => {
+    setUnansweredCount(questions.length);
+  }, [questions]);
 
   useEffect(() => {
     setTimeout(() => {

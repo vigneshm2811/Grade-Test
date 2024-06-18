@@ -112,7 +112,7 @@ const ResultInterface = () => {
       <div className="md:px-24 px-8  py-10 ">
         <div className="flex  justify-center relative">
           <div className="lg:w-[60%] w-full">
-            <h3 className="font-semibold">English Test</h3>
+            <h3 className="font-semibold text-xl">{questionType}</h3>
             <div className="flex md:justify-between justify-center gap-2 md:gap-0 flex-wrap my-6 ">
               {ResultDataCards?.map((e) => {
                 let value = "";

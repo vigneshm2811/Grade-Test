@@ -10,7 +10,6 @@ const LatestAttemptTab = () => {
   }, []);
 
   function formatDateTime(dateTime) {
-    console.log(dateTime, "date");
     const options = {
       weekday: "long",
       year: "numeric",
